@@ -170,7 +170,7 @@ function Ayuda() {
                 GoFundMe — Donación internacional ❤️
               </h2>
               <p className="mt-1 text-cocoa/80">
-                Si quieres ayudar desde el extranjero, tengo una campaña en GoFundMe para la cirugía urgente de Maylu.
+                Si quieres ayudar desde el extranjero, tengo una campaña en GoFundMe.
               </p>
             </div>
             <a
