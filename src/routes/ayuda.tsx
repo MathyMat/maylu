@@ -37,10 +37,10 @@ function Ayuda() {
       <Header />
 
       <section className="mx-auto max-w-5xl px-4 py-12">
-        <h1 className="text-center font-display text-5xl font-bold text-cocoa">
+        <h1 className="text-center font-display text-4xl font-bold text-cocoa sm:text-5xl">
           Cómo ayudar 💛
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-cocoa/70">
+        <p className="mx-auto mt-4 max-w-2xl text-center text-base text-cocoa/70 sm:text-lg">
           Soy estudiante de Desarrollo de Software y por mis horarios no puedo
           conseguir un trabajo. Para reunir lo de la operación de Maylu estoy
           vendiendo chocotejas e instalando Office. Toda ayuda suma.
@@ -51,9 +51,8 @@ function Ayuda() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-5xl gap-6 px-4 pb-8 md:grid-cols-2">
-        {/* Chocotejas */}
-        <article className="rounded-3xl border-2 border-butter bg-white p-7 shadow-[0_10px_0_-2px_var(--color-honey)]">
+      <section className="mx-auto grid max-w-5xl gap-4 px-4 pb-8 md:grid-cols-2 md:gap-6">
+        <article className="rounded-3xl border-2 border-butter bg-white p-5 shadow-[0_10px_0_-2px_var(--color-honey)] sm:p-7">
           <img
             src={photos.chocotejas}
             alt="Chocotejas de Maylu"
@@ -71,8 +70,8 @@ function Ayuda() {
             </div>
           </div>
 
-          <div className="mt-5 flex items-baseline gap-4">
-            <p className="font-display text-4xl font-bold text-cocoa">S/ 5</p>
+          <div className="mt-5 flex flex-wrap items-baseline gap-3">
+            <p className="font-display text-3xl font-bold text-cocoa sm:text-4xl">S/ 5</p>
             <p className="text-cocoa/60">c/u</p>
             <span className="ml-auto rounded-full bg-blush/60 px-3 py-1 text-sm font-bold text-cocoa">
               Pack de 3 → S/ 14
@@ -104,8 +103,7 @@ function Ayuda() {
           </a>
         </article>
 
-        {/* Office */}
-        <article className="rounded-3xl border-2 border-blush bg-white p-7 shadow-[0_10px_0_-2px_var(--color-blush)]">
+        <article className="rounded-3xl border-2 border-blush bg-white p-5 shadow-[0_10px_0_-2px_var(--color-blush)] sm:p-7">
           <div className="flex items-center gap-3">
             <span className="grid h-14 w-14 place-items-center rounded-2xl bg-blush text-3xl">
               💻
@@ -119,7 +117,7 @@ function Ayuda() {
           </div>
 
           <div className="mt-5 flex items-baseline gap-4">
-            <p className="font-display text-4xl font-bold text-cocoa">S/ 10</p>
+            <p className="font-display text-3xl font-bold text-cocoa sm:text-4xl">S/ 10</p>
             <p className="text-cocoa/60">por instalación</p>
           </div>
 
@@ -140,14 +138,13 @@ function Ayuda() {
           </a>
         </article>
 
-        {/* Donación por Yape */}
-        <article className="rounded-3xl border-2 border-cocoa bg-butter p-7 md:col-span-2">
+        <article className="rounded-3xl border-2 border-cocoa bg-butter p-5 md:col-span-2 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="font-display text-2xl font-bold text-cocoa">
+              <h2 className="font-display text-xl font-bold text-cocoa sm:text-2xl">
                 Donación directa por Yape / Plin 💛
               </h2>
-              <p className="mt-1 text-cocoa/80">
+              <p className="mt-1 text-sm text-cocoa/80 sm:text-base">
                 Si quieres apoyar a salvar a mi niño, escríbeme por WhatsApp al {CONFIG.whatsappDisplay}.
               </p>
             </div>
@@ -155,21 +152,20 @@ function Ayuda() {
               href={waLink(`Hola! Quiero donar para Maylu 💛 ¿Me pasas tu Yape al ${CONFIG.yape}?`)}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-cocoa px-6 py-3 font-display font-bold text-cream shadow-lg"
+              className="w-full rounded-full bg-cocoa px-6 py-3 text-center font-display font-bold text-cream shadow-lg sm:w-auto"
             >
               Pedir Yape
             </a>
           </div>
         </article>
 
-        {/* GoFundMe */}
-        <article className="rounded-3xl border-2 border-honey bg-white p-7 md:col-span-2">
+        <article className="rounded-3xl border-2 border-honey bg-white p-5 md:col-span-2 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="font-display text-2xl font-bold text-cocoa">
+              <h2 className="font-display text-xl font-bold text-cocoa sm:text-2xl">
                 GoFundMe — Donación internacional ❤️
               </h2>
-              <p className="mt-1 text-cocoa/80">
+              <p className="mt-1 text-sm text-cocoa/80 sm:text-base">
                 Si quieres ayudar desde el extranjero, tengo una campaña en GoFundMe.
               </p>
             </div>
@@ -177,7 +173,7 @@ function Ayuda() {
               href="https://www.gofundme.com/f/help-maylu-get-the-surgery-he-urgently-needs"
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-honey px-6 py-3 font-display font-bold text-cocoa shadow-lg hover:scale-105 transition"
+              className="w-full rounded-full bg-honey px-6 py-3 text-center font-display font-bold text-cocoa shadow-lg transition hover:scale-105 sm:w-auto"
             >
               Ir a GoFundMe
             </a>
@@ -186,7 +182,7 @@ function Ayuda() {
       </section>
 
       <section className="mx-auto max-w-3xl px-4 pb-16 text-center">
-        <p className="font-display text-2xl font-bold text-cocoa">
+        <p className="font-display text-xl font-bold text-cocoa sm:text-2xl">
           Muchas gracias por tomarte el tiempo de leer 💛
         </p>
         <p className="mt-2 text-cocoa/70">Ayúdame a salvar a {CONFIG.dogName}.</p>

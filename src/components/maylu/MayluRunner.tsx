@@ -57,14 +57,12 @@ function randomFact(prev?: string): string {
   return f;
 }
 
-// ── Palette ──────────────────────────────────────────────────────────────────
 const C = {
   sky1: "#FFF8E7",
   sky2: "#FFE5A0",
   ground: "#C8960C",
   groundFill: "#E8C84A",
   dirt: "#7B4A2D",
-  // Make the dog black
   dog: "#0b0b0b",
   dogAccent: "#1f1f1f",
   coin: "#FFD93D",
@@ -88,7 +86,6 @@ export function MayluRunner() {
   const [best, setBest] = useState(0);
   const [coinsCollected, setCoinsCollected] = useState(0);
   const [fact, setFact] = useState<string>(() => randomFact());
-  // For mobile virtual buttons
   const jumpPressedRef = useRef(false);
   const duckPressedRef = useRef(false);
 
@@ -128,7 +125,6 @@ export function MayluRunner() {
     let shakeFrames = 0;
     let invincible = 0; // brief invincibility after near-miss (unused but kept)
 
-    // ── Input ──────────────────────────────────────────────────────────────
     const jump = () => {
       if (jumpsLeft > 0) {
         dogV = JUMP_V * (jumpsLeft === 2 ? 1 : 0.82);
@@ -153,7 +149,6 @@ export function MayluRunner() {
       if (e.code === "ArrowDown") duckDown(false);
     };
 
-    // Touch on canvas — upper area jump, lower area duck
     const pointer = (e: PointerEvent) => {
       e.preventDefault();
       const rect = canvas.getBoundingClientRect();
@@ -170,7 +165,6 @@ export function MayluRunner() {
     window.addEventListener("keyup", keyUp);
     canvas.addEventListener("pointerdown", pointer);
 
-    // Virtual button polling (set by React button handlers)
     const pollVirtual = () => {
       if (jumpPressedRef.current) {
         jumpPressedRef.current = false;
@@ -183,7 +177,6 @@ export function MayluRunner() {
       }
     };
 
-    // ── Particles ──────────────────────────────────────────────────────────
     const spawnJumpParticles = () => {
       for (let i = 0; i < 5; i++) {
         particles.push({
@@ -230,7 +223,6 @@ export function MayluRunner() {
       }
     };
 
-    // ── Spawn ──────────────────────────────────────────────────────────────
     const spawnObstacle = () => {
       const r = Math.random();
       let kind: Obstacle["kind"];
@@ -250,13 +242,11 @@ export function MayluRunner() {
       } else if (kind === "pill") {
         obstacles.push({ x: W + 20, w: 22, h: 22, y: GROUND_Y - 22, kind });
       } else {
-        // cone
         obstacles.push({ x: W + 20, w: 20, h: 30, y: GROUND_Y - 30, kind });
       }
     };
 
     const spawnCoin = () => {
-      // sometimes spawn a row of 3
       const row = Math.random() < 0.3;
       const baseY = GROUND_Y - 45 - Math.random() * 60;
       const count = row ? 3 : 1;
@@ -265,7 +255,6 @@ export function MayluRunner() {
       }
     };
 
-    // ── Draw helpers ───────────────────────────────────────────────────────
     const drawCloud = (c: Cloud) => {
       ctx.fillStyle = "rgba(255,255,255,0.75)";
       ctx.beginPath();
@@ -293,13 +282,11 @@ export function MayluRunner() {
       const legLen = ducking ? 5 : 9;
       const legPhase = Math.floor(frame / 5) % 2;
 
-      // Shadow
       ctx.fillStyle = "rgba(0,0,0,0.12)";
       ctx.beginPath();
       ctx.ellipse(x + 26, GROUND_Y + 4, 22, 5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Tail
       ctx.beginPath();
       ctx.moveTo(x + 2, y - 20);
       const tailWag = Math.sin(frame * 0.25) * 8;
@@ -309,13 +296,11 @@ export function MayluRunner() {
       ctx.lineCap = "round";
       ctx.stroke();
 
-      // Body
       ctx.fillStyle = C.dog;
       ctx.beginPath();
       ctx.ellipse(x + 24, y + bodyOffY, 23, bodyH, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Legs
       ctx.fillStyle = C.dog;
       const l1 = legPhase ? legLen + 3 : legLen;
       const l2 = legPhase ? legLen : legLen + 3;
@@ -326,7 +311,6 @@ export function MayluRunner() {
       ctx.roundRect(x + 36, y - 6, 5, l2, 2);
       ctx.fill();
 
-      // Head
       const headY = ducking ? y - 12 : y - 24;
       const headX = ducking ? x + 52 : x + 46;
       ctx.fillStyle = C.dog;
@@ -334,26 +318,22 @@ export function MayluRunner() {
       ctx.ellipse(headX, headY, 11, 9, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Ears
       ctx.beginPath();
       ctx.moveTo(headX - 5, headY - 9);
       ctx.lineTo(headX - 1, headY - 20);
       ctx.lineTo(headX + 4, headY - 9);
       ctx.fill();
 
-      // Snout
       ctx.fillStyle = C.dogAccent;
       ctx.beginPath();
       ctx.ellipse(headX + 8, headY + 2, 6, 4, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Nose
       ctx.fillStyle = "#1a0e08";
       ctx.beginPath();
       ctx.ellipse(headX + 12, headY + 1, 2, 1.5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Eye
       ctx.fillStyle = C.white;
       ctx.beginPath();
       ctx.ellipse(headX + 2, headY - 2, 3, 3, 0, 0, Math.PI * 2);
@@ -362,13 +342,11 @@ export function MayluRunner() {
       ctx.beginPath();
       ctx.ellipse(headX + 3, headY - 2, 2, 2, 0, 0, Math.PI * 2);
       ctx.fill();
-      // Eye shine
       ctx.fillStyle = C.white;
       ctx.beginPath();
       ctx.ellipse(headX + 4, headY - 3, 0.8, 0.8, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Tongue (when running fast)
       if (speed > 7) {
         ctx.fillStyle = C.red;
         ctx.beginPath();
@@ -382,25 +360,21 @@ export function MayluRunner() {
     const drawObstacle = (o: Obstacle) => {
       if (o.kind === "cactus") {
         ctx.fillStyle = C.green;
-        // Main stem
         ctx.beginPath();
         ctx.roundRect(o.x + 4, o.y, 10, o.h, 4);
         ctx.fill();
-        // Left arm
         ctx.beginPath();
         ctx.roundRect(o.x - 6, o.y + 10, 10, 12, 3);
         ctx.fill();
         ctx.beginPath();
         ctx.roundRect(o.x - 6, o.y + 10, 6, 4, 2);
         ctx.fill();
-        // Right arm
         ctx.beginPath();
         ctx.roundRect(o.x + o.w - 4, o.y + 14, 10, 12, 3);
         ctx.fill();
         ctx.beginPath();
         ctx.roundRect(o.x + o.w - 4, o.y + 14, 6, 4, 2);
         ctx.fill();
-        // Spikes
         ctx.strokeStyle = "#3a5f1e";
         ctx.lineWidth = 1.5;
         for (let i = 0; i < 3; i++) {
@@ -414,29 +388,24 @@ export function MayluRunner() {
           ctx.stroke();
         }
       } else if (o.kind === "syringe") {
-        // Body
         ctx.fillStyle = "#dce8f0";
         ctx.beginPath();
         ctx.roundRect(o.x, o.y + 2, o.w, o.h - 4, 3);
         ctx.fill();
-        // Liquid
         ctx.fillStyle = "#e94d8a";
         ctx.beginPath();
         ctx.roundRect(o.x + 2, o.y + 4, (o.w - 4) * 0.7, o.h - 8, 2);
         ctx.fill();
-        // Needle
         ctx.fillStyle = "#90a4ae";
         ctx.beginPath();
         ctx.moveTo(o.x + o.w, o.y + o.h / 2 - 2);
         ctx.lineTo(o.x + o.w + 10, o.y + o.h / 2);
         ctx.lineTo(o.x + o.w, o.y + o.h / 2 + 2);
         ctx.fill();
-        // Plunger
         ctx.fillStyle = "#7B4A2D";
         ctx.beginPath();
         ctx.roundRect(o.x - 8, o.y - 1, 8, o.h + 2, 2);
         ctx.fill();
-        // Scale marks
         ctx.strokeStyle = "#90a4ae";
         ctx.lineWidth = 1;
         for (let i = 0; i < 3; i++) {
@@ -446,17 +415,14 @@ export function MayluRunner() {
           ctx.stroke();
         }
       } else if (o.kind === "pill") {
-        // Capsule shape
         ctx.fillStyle = C.butter;
         ctx.beginPath();
         ctx.roundRect(o.x, o.y, o.w, o.h, o.w / 2);
         ctx.fill();
-        // Half divider
         ctx.fillStyle = "#e0a800";
         ctx.beginPath();
         ctx.roundRect(o.x + o.w / 2, o.y, o.w / 2, o.h, [0, o.w / 2, o.w / 2, 0]);
         ctx.fill();
-        // Center line
         ctx.strokeStyle = "#c88f00";
         ctx.lineWidth = 1.5;
         ctx.beginPath();
@@ -464,7 +430,6 @@ export function MayluRunner() {
         ctx.lineTo(o.x + o.w / 2, o.y + o.h - 2);
         ctx.stroke();
       } else if (o.kind === "cone") {
-        // Traffic cone / vet cone
         ctx.fillStyle = C.red;
         ctx.beginPath();
         ctx.moveTo(o.x + o.w / 2, o.y);
@@ -472,7 +437,6 @@ export function MayluRunner() {
         ctx.lineTo(o.x, o.y + o.h);
         ctx.closePath();
         ctx.fill();
-        // Stripes
         ctx.strokeStyle = C.white;
         ctx.lineWidth = 2;
         for (let i = 1; i <= 2; i++) {
@@ -484,25 +448,21 @@ export function MayluRunner() {
           ctx.lineTo(o.x + o.w / 2 + halfW, yy);
           ctx.stroke();
         }
-        // Base
         ctx.fillStyle = "#c0c0c0";
         ctx.beginPath();
         ctx.roundRect(o.x - 2, o.y + o.h - 4, o.w + 4, 4, 2);
         ctx.fill();
       } else {
-        // bird
         const flap = Math.floor(frame / 7) % 2 === 0 ? -7 : 5;
         ctx.fillStyle = C.dogAccent;
         ctx.beginPath();
         ctx.ellipse(o.x + 15, o.y + 10, 13, 7, 0, 0, Math.PI * 2);
         ctx.fill();
-        // Wing
         ctx.beginPath();
         ctx.moveTo(o.x + 9, o.y + 10);
         ctx.lineTo(o.x + 15, o.y + 10 + flap);
         ctx.lineTo(o.x + 21, o.y + 10);
         ctx.fill();
-        // Beak
         ctx.fillStyle = C.butter;
         ctx.beginPath();
         ctx.moveTo(o.x + 27, o.y + 10);
@@ -510,7 +470,6 @@ export function MayluRunner() {
         ctx.lineTo(o.x + 27, o.y + 14);
         ctx.closePath();
         ctx.fill();
-        // Eye
         ctx.fillStyle = C.white;
         ctx.beginPath();
         ctx.arc(o.x + 24, o.y + 9, 3, 0, Math.PI * 2);
@@ -529,14 +488,12 @@ export function MayluRunner() {
       const y = c.y + bounce;
       const r = 9;
 
-      // Glow ring
       ctx.strokeStyle = "rgba(255, 217, 61, 0.35)";
       ctx.lineWidth = 5;
       ctx.beginPath();
       ctx.arc(c.x, y, r + 4, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Main coin
       ctx.fillStyle = C.coin;
       ctx.beginPath();
       ctx.arc(c.x, y, r, 0, Math.PI * 2);
@@ -545,7 +502,6 @@ export function MayluRunner() {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Bone icon
       ctx.fillStyle = C.cocoa;
       ctx.font = "bold 11px system-ui";
       ctx.textAlign = "center";
@@ -575,11 +531,9 @@ export function MayluRunner() {
     };
 
     const drawGround = () => {
-      // Ground fill
       ctx.fillStyle = C.groundFill;
       ctx.fillRect(0, GROUND_Y + 2, W, H - GROUND_Y - 2);
 
-      // Ground top line
       ctx.strokeStyle = C.ground;
       ctx.lineWidth = 2.5;
       ctx.beginPath();
@@ -587,7 +541,6 @@ export function MayluRunner() {
       ctx.lineTo(W, GROUND_Y + 2);
       ctx.stroke();
 
-      // Dashes (scrolling)
       ctx.fillStyle = C.coinEdge;
       for (let i = 0; i < 10; i++) {
         const raw = i * 90 - (frame * speed * 0.6);
@@ -595,7 +548,6 @@ export function MayluRunner() {
         ctx.fillRect(x, GROUND_Y + 10, 30, 2);
       }
 
-      // Small pebbles
       ctx.fillStyle = "rgba(180,130,60,0.5)";
       for (let i = 0; i < 8; i++) {
         const raw = i * 100 + 30 - frame * speed * 0.8;
@@ -606,7 +558,6 @@ export function MayluRunner() {
       }
     };
 
-    // ── Main loop ──────────────────────────────────────────────────────────
     const loop = () => {
       frame++;
       pollVirtual();
@@ -624,7 +575,6 @@ export function MayluRunner() {
       ctx.beginPath();
       ctx.arc(W - 70, 44, sunSize, 0, Math.PI * 2);
       ctx.fill();
-      // Sun rays
       ctx.strokeStyle = t > 0.5 ? "rgba(255,217,61,0.4)" : "rgba(255,160,64,0.4)";
       ctx.lineWidth = 2;
       for (let i = 0; i < 8; i++) {
@@ -635,7 +585,6 @@ export function MayluRunner() {
         ctx.stroke();
       }
 
-      // Clouds
       clouds.forEach((c) => {
         c.x -= c.speed;
         if (c.x + c.w < -10) c.x = W + c.w;
@@ -644,7 +593,6 @@ export function MayluRunner() {
 
       drawGround();
 
-      // Physics
       dogV += GRAVITY;
       dogY += dogV;
       if (dogY >= GROUND_Y) {
@@ -654,12 +602,10 @@ export function MayluRunner() {
       }
       drawDog(dogX, dogY);
 
-      // Spawn
       nextSpawn--;
       if (nextSpawn <= 0) {
         spawnObstacle();
         const diff = Math.min(40, localScore / 60);
-        // Make obstacles less frequent: higher base and wider random range, with a reasonable minimum
         nextSpawn = Math.max(45, 85 + Math.floor(Math.random() * 80) - diff);
       }
       nextCoin--;
@@ -668,24 +614,20 @@ export function MayluRunner() {
         nextCoin = 130 + Math.floor(Math.random() * 160);
       }
 
-      // Move & draw obstacles
       obstacles.forEach((o) => (o.x -= speed));
       obstacles = obstacles.filter((o) => o.x + o.w > -30);
       obstacles.forEach(drawObstacle);
 
-      // Move & draw coins
       coins.forEach((c) => (c.x -= speed));
       coins = coins.filter((c) => c.x > -30 && !c.taken);
       coins.forEach(drawCoin);
 
       drawParticles();
 
-      // Hitbox
       const dogBox = ducking
         ? { x: dogX + 4, y: dogY - 16, w: 58, h: 16 }
         : { x: dogX + 8, y: dogY - 36, w: 46, h: 36 };
 
-      // Coin pickup
       for (const c of coins) {
         if (c.taken) continue;
         const dx = c.x - (dogBox.x + dogBox.w / 2);
@@ -699,7 +641,6 @@ export function MayluRunner() {
         }
       }
 
-      // Collision
       for (const o of obstacles) {
         const pad = 5;
         if (
@@ -709,7 +650,6 @@ export function MayluRunner() {
           dogBox.y + dogBox.h > o.y + pad
         ) {
           spawnDeathParticles(dogX + 30, dogY - 20);
-          // Draw one last death frame
           drawParticles();
           const finalScore = localScore;
           setBest((b) => Math.max(b, finalScore));
@@ -723,16 +663,12 @@ export function MayluRunner() {
         }
       }
 
-      // Score
       localScore += 1;
       if (frame % 4 === 0) setScore(localScore);
-      // Ramp speed gradually; slow ramp so speed increases more slowly over time
       const desiredInc = Math.min(3, localScore / 600);
-      // rampFactor goes 0..1 over ~3000 frames (~50s at 60fps)
       const rampFactor = Math.min(1, frame / 3000);
       speed = BASE_SPEED + desiredInc * rampFactor;
 
-      // HUD
       ctx.fillStyle = "rgba(92,58,30,0.85)";
       ctx.beginPath();
       ctx.roundRect(W - 120, 8, 112, 30, 8);
@@ -751,7 +687,6 @@ export function MayluRunner() {
       ctx.textAlign = "left";
       ctx.fillText(`🦴 ${localCoins}`, 16, 23);
 
-      // Speed indicator
       const speedPct = Math.min(1, (speed - BASE_SPEED) / 5.5);
       if (speedPct > 0.3) {
         ctx.fillStyle = "rgba(233,77,77,0.15)";
@@ -773,9 +708,8 @@ export function MayluRunner() {
 
   return (
     <div className="mx-auto w-full max-w-3xl select-none" ref={wrapRef}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-1 mb-2">
-        <p className="font-display font-bold text-cocoa text-lg">Maylu Run 🐾</p>
+      <div className="mb-2 flex items-center justify-between px-1">
+        <p className="font-display text-lg font-bold text-cocoa">Maylu Run 🐾</p>
         <div className="flex items-center gap-3">
           <p className="text-sm text-cocoa/70">
             Mejor: <span className="font-bold text-cocoa">{best}</span>
@@ -783,24 +717,22 @@ export function MayluRunner() {
         </div>
       </div>
 
-      {/* Canvas */}
-      <div className="relative overflow-hidden rounded-2xl border-2 border-cocoa shadow-xl bg-cream">
+      <div className="relative overflow-hidden rounded-2xl border-2 border-cocoa bg-cream shadow-xl">
         <canvas
           ref={canvasRef}
           width={W}
           height={H}
-          className="block h-auto w-full touch-none"
+          className="block h-auto max-h-[48vh] w-full touch-none"
           style={{ aspectRatio: `${W}/${H}` }}
         />
 
-        {/* IDLE screen */}
         {state === "idle" && (
           <div className="absolute inset-0 flex items-center justify-center bg-cocoa/75 backdrop-blur-[2px]">
-            <div className="text-center text-cream px-6 max-w-sm">
+            <div className="max-w-sm px-6 text-center text-cream">
               <p className="text-5xl mb-2">🐾</p>
               <h3 className="font-display text-2xl font-bold">Maylu Run</h3>
               <p className="mt-2 text-sm opacity-90 leading-relaxed">
-                Ayuda a Maylu a esquivar obstáculos y recoger huesitos 🦴
+                Ayuda a Maylu a esquivar obstáculos y recoger monedas 💰
               </p>
               <button
                 onClick={start}
@@ -816,7 +748,6 @@ export function MayluRunner() {
           </div>
         )}
 
-        {/* GAMEOVER screen */}
         {state === "gameover" && (
           <div className="absolute inset-0 flex items-center justify-center bg-cocoa/88 backdrop-blur-[2px] px-4">
             <div className="w-full max-w-md text-center text-cream">
@@ -824,13 +755,12 @@ export function MayluRunner() {
               <h3 className="font-display text-2xl font-bold">¡Game Over!</h3>
               <div className="flex justify-center gap-6 mt-1 text-sm">
                 <span>Puntaje: <strong>{score}</strong></span>
-                <span>🦴 <strong>{coinsCollected}</strong></span>
+                <span>💰 <strong>{coinsCollected}</strong></span>
                 {score === best && score > 0 && (
                   <span className="text-butter font-bold">⭐ ¡Nuevo récord!</span>
                 )}
               </div>
 
-              {/* Fact card */}
               <div className="mt-3 rounded-xl border border-butter/40 bg-white/10 p-3 text-left">
                 <p className="text-[11px] font-bold uppercase tracking-wider text-butter mb-1">
                   ¿Sabías que? · Viringo peruano
@@ -857,33 +787,35 @@ export function MayluRunner() {
         )}
       </div>
 
-      {/* Mobile virtual controls */}
       {state === "playing" && (
-        <div className="mt-3 flex gap-3 sm:hidden">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
           <button
-            className="flex-1 rounded-2xl bg-cocoa py-5 text-cream text-2xl font-bold active:bg-cocoa/70 active:scale-95 transition-all touch-none shadow-md"
+            className="rounded-2xl bg-cocoa py-4 text-xl font-bold text-cream shadow-md transition-all active:scale-95 active:bg-cocoa/70 touch-none"
             onPointerDown={(e) => {
               e.preventDefault();
               jumpPressedRef.current = true;
             }}
           >
-            ↑ Saltar
+            Saltar
           </button>
           <button
-            className="flex-1 rounded-2xl border-2 border-cocoa bg-cream/80 py-5 text-cocoa text-2xl font-bold active:bg-cocoa/10 active:scale-95 transition-all touch-none shadow-md"
+            className="rounded-2xl border-2 border-cocoa bg-cream/80 py-4 text-xl font-bold text-cocoa shadow-md transition-all active:scale-95 active:bg-cocoa/10 touch-none"
             onPointerDown={(e) => {
               e.preventDefault();
               duckPressedRef.current = true;
             }}
-            onPointerUp={() => { duckPressedRef.current = false; }}
-            onPointerLeave={() => { duckPressedRef.current = false; }}
+            onPointerUp={() => {
+              duckPressedRef.current = false;
+            }}
+            onPointerLeave={() => {
+              duckPressedRef.current = false;
+            }}
           >
-            ↓ Agachar
+            Agachar
           </button>
         </div>
       )}
 
-      {/* Desktop hint */}
       {state === "playing" && (
         <p className="mt-2 text-center text-xs text-cocoa/50 hidden sm:block">
           Espacio / ↑ saltar (doble salto) · ↓ agacharse
