@@ -14,14 +14,21 @@ export const Route = createFileRoute("/historia")({
           "13 años de vida con Maylu. Desde que llegó cachorrito en marzo de 2013 hasta hoy.",
       },
       { property: "og:title", content: "La historia de Maylu" },
-      { property: "og:description", content: "13 años de momentos con Maylu y su historia.", },
+      { property: "og:description", content: "13 años de momentos con Maylu y su historia." },
       { property: "og:image", content: photos.puppyBox },
     ],
   }),
   component: Historia,
 });
 
-type Beat = { year: string; title: string; text: string; img: string; sensitive?: boolean; needs?: string };
+type Beat = {
+  year: string;
+  title: string;
+  text: string;
+  img: string;
+  sensitive?: boolean;
+  needs?: string;
+};
 
 const timeline: Beat[] = [
   {
@@ -81,15 +88,17 @@ function TimelineItem({ beat, i }: { beat: Beat; i: number }) {
   const [showPrescription, setShowPrescription] = useState(false);
   const left = i % 2 === 0;
   return (
-    <div className={`grid gap-6 md:grid-cols-2 md:items-center ${left ? "" : "md:[&>*:first-child]:order-2"}`}>
+    <div
+      className={`grid gap-4 md:gap-6 md:grid-cols-2 md:items-center ${left ? "" : "md:[&>*:first-child]:order-2"}`}
+    >
       <div className="relative">
         {!show && (
           <button
             onClick={() => setShow(true)}
-            className="absolute inset-0 z-10 grid place-items-center rounded-3xl bg-cocoa/80 text-center text-cream backdrop-blur-sm"
+            className="absolute inset-0 z-10 grid place-items-center rounded-2xl md:rounded-3xl bg-cocoa/80 text-center text-cream backdrop-blur-sm"
           >
             <div>
-              <p className="text-3xl">⚠️</p>
+              <p className="text-2xl md:text-3xl">⚠️</p>
               <p className="mt-2 font-display font-bold">Foto sensible</p>
               <p className="text-xs opacity-80">Toca para ver</p>
             </div>
@@ -98,15 +107,15 @@ function TimelineItem({ beat, i }: { beat: Beat; i: number }) {
         <img
           src={beat.img}
           alt={beat.title}
-          className="aspect-[4/3] w-full rounded-3xl object-cover shadow-xl"
+          className="aspect-[4/3] w-full rounded-2xl md:rounded-3xl object-cover shadow-xl"
         />
         {beat.sensitive && beat.needs && (
-          <div className="absolute -bottom-5 right-4 z-20 max-w-[16rem] rounded-2xl border-2 border-cocoa bg-butter px-4 py-3 shadow-lg">
-            <p className="mt-1 text-sm text-cocoa/80">{beat.needs}</p>
+          <div className="relative md:absolute md:-bottom-5 md:right-4 z-20 max-w-full md:max-w-[16rem] mt-3 md:mt-0 rounded-2xl border-2 border-cocoa bg-butter px-4 py-3 shadow-lg">
+            <p className="text-sm text-cocoa/80">{beat.needs}</p>
           </div>
         )}
         {beat.sensitive && (
-          <div className="mt-10">
+          <div className="mt-3 md:mt-10">
             <button
               type="button"
               onClick={() => setShowPrescription((value) => !value)}
@@ -118,7 +127,7 @@ function TimelineItem({ beat, i }: { beat: Beat; i: number }) {
               <img
                 src={photos.vetDiag}
                 alt="Lo recetado para Maylu"
-                className="mt-4 w-full rounded-3xl object-cover shadow-xl"
+                className="mt-4 w-full rounded-2xl md:rounded-3xl object-cover shadow-xl"
               />
             )}
           </div>
@@ -128,8 +137,10 @@ function TimelineItem({ beat, i }: { beat: Beat; i: number }) {
         <span className="inline-block rounded-full bg-butter px-3 py-1 font-display text-xs font-bold uppercase text-cocoa">
           {beat.year}
         </span>
-        <h3 className="mt-3 font-display text-3xl font-bold text-cocoa">{beat.title}</h3>
-        <p className="mt-2 text-lg text-cocoa/80">{beat.text}</p>
+        <h3 className="mt-3 font-display text-2xl md:text-3xl font-bold text-cocoa">
+          {beat.title}
+        </h3>
+        <p className="mt-2 text-base md:text-lg text-cocoa/80">{beat.text}</p>
       </div>
     </div>
   );
@@ -139,12 +150,13 @@ function Historia() {
   return (
     <div className="min-h-screen bg-cream">
       <Header />
-      <section className="mx-auto max-w-3xl px-4 py-12 text-center">
-        <h1 className="font-display text-5xl font-bold text-cocoa">
+      <section className="mx-auto max-w-3xl px-4 py-10 md:py-12 text-center">
+        <h1 className="font-display text-3xl md:text-5xl font-bold text-cocoa">
           La historia de <span className="bg-butter px-2 rounded-lg">Maylu</span>
         </h1>
-        <p className="mt-4 text-lg text-cocoa/70">
-13 años de vida con Maylu. Desde que llegó cachorrito en marzo de 2013 hasta hoy.        </p>
+        <p className="mt-4 text-base md:text-lg text-cocoa/70">
+          13 años de vida con Maylu. Desde que llegó cachorrito en marzo de 2013 hasta hoy.{" "}
+        </p>
       </section>
 
       <section className="mx-auto max-w-5xl space-y-16 px-4 pb-16">

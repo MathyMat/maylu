@@ -41,9 +41,9 @@ function Ayuda() {
           Cómo ayudar 💛
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-center text-base text-cocoa/70 sm:text-lg">
-          Soy estudiante de Desarrollo de Software y por mis horarios no puedo
-          conseguir un trabajo. Para reunir lo de la operación de Maylu estoy
-          vendiendo chocotejas e instalando Office. Toda ayuda suma.
+          Soy estudiante de Desarrollo de Software y por mis horarios no puedo conseguir un trabajo.
+          Para reunir lo de la operación de Maylu estoy vendiendo chocotejas e instalando Office.
+          Toda ayuda suma.
         </p>
 
         <div className="mt-8">
@@ -63,9 +63,7 @@ function Ayuda() {
               🍫
             </span>
             <div>
-              <h2 className="font-display text-2xl font-bold text-cocoa">
-                Chocotejas Pompompurin
-              </h2>
+              <h2 className="font-display text-2xl font-bold text-cocoa">Chocotejas Pompompurin</h2>
               <p className="text-sm text-cocoa/60">Hechas en casa con amor</p>
             </div>
           </div>
@@ -92,9 +90,7 @@ function Ayuda() {
           <p className="mt-4 text-sm font-bold text-cocoa">🚚 Envío gratis</p>
 
           <a
-            href={waLink(
-              "Hola! Quiero pedir chocotejas Pompompurin para apoyar a Maylu 🐾",
-            )}
+            href={waLink("Hola! Quiero pedir chocotejas Pompompurin para apoyar a Maylu 🐾")}
             target="_blank"
             rel="noreferrer"
             className="mt-5 block rounded-full bg-cocoa py-3 text-center font-display font-bold text-cream shadow-lg transition hover:scale-[1.02]"
@@ -109,9 +105,7 @@ function Ayuda() {
               💻
             </span>
             <div>
-              <h2 className="font-display text-2xl font-bold text-cocoa">
-                Instalación de Office
-              </h2>
+              <h2 className="font-display text-2xl font-bold text-cocoa">Instalación de Office</h2>
               <p className="text-sm text-cocoa/60">Permanente · Soy dev en formación</p>
             </div>
           </div>
@@ -122,8 +116,8 @@ function Ayuda() {
           </div>
 
           <p className="mt-5 text-cocoa/80">
-            Te dejo Office instalado de manera permanente en tu computadora. Rápido,
-            limpio y con soporte si algo falla.
+            Te dejo Office instalado de manera permanente en tu computadora. Rápido, limpio y con
+            soporte si algo falla.
           </p>
 
           <a
@@ -145,7 +139,8 @@ function Ayuda() {
                 Donación directa por Yape / Plin 💛
               </h2>
               <p className="mt-1 text-sm text-cocoa/80 sm:text-base">
-                Si quieres apoyar a salvar a mi niño, escríbeme por WhatsApp al {CONFIG.whatsappDisplay}.
+                Si quieres apoyar a salvar a mi niño, escríbeme por WhatsApp al{" "}
+                {CONFIG.whatsappDisplay}.
               </p>
             </div>
             <a

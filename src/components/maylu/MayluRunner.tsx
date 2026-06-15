@@ -51,8 +51,7 @@ const VIRINGO_FACTS = [
 function randomFact(prev?: string): string {
   let f = VIRINGO_FACTS[Math.floor(Math.random() * VIRINGO_FACTS.length)];
   if (prev && VIRINGO_FACTS.length > 1) {
-    while (f === prev)
-      f = VIRINGO_FACTS[Math.floor(Math.random() * VIRINGO_FACTS.length)];
+    while (f === prev) f = VIRINGO_FACTS[Math.floor(Math.random() * VIRINGO_FACTS.length)];
   }
   return f;
 }
@@ -271,10 +270,7 @@ export function MayluRunner() {
     const drawDog = (x: number, y: number) => {
       ctx.save();
       if (shakeFrames > 0) {
-        ctx.translate(
-          (Math.random() - 0.5) * 3,
-          (Math.random() - 0.5) * 3
-        );
+        ctx.translate((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3);
       }
 
       const bodyH = ducking ? 9 : 13;
@@ -543,7 +539,7 @@ export function MayluRunner() {
 
       ctx.fillStyle = C.coinEdge;
       for (let i = 0; i < 10; i++) {
-        const raw = i * 90 - (frame * speed * 0.6);
+        const raw = i * 90 - frame * speed * 0.6;
         const x = ((raw % (W + 90)) + (W + 90)) % (W + 90);
         ctx.fillRect(x, GROUND_Y + 10, 30, 2);
       }
@@ -754,8 +750,12 @@ export function MayluRunner() {
               <p className="text-3xl mb-1">💥</p>
               <h3 className="font-display text-2xl font-bold">¡Game Over!</h3>
               <div className="flex justify-center gap-6 mt-1 text-sm">
-                <span>Puntaje: <strong>{score}</strong></span>
-                <span>💰 <strong>{coinsCollected}</strong></span>
+                <span>
+                  Puntaje: <strong>{score}</strong>
+                </span>
+                <span>
+                  💰 <strong>{coinsCollected}</strong>
+                </span>
                 {score === best && score > 0 && (
                   <span className="text-butter font-bold">⭐ ¡Nuevo récord!</span>
                 )}
