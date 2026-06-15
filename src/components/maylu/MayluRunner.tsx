@@ -85,14 +85,44 @@ export function MayluRunner() {
   const [best, setBest] = useState(0);
   const [coinsCollected, setCoinsCollected] = useState(0);
   const [fact, setFact] = useState<string>(() => randomFact());
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const jumpPressedRef = useRef(false);
   const duckPressedRef = useRef(false);
+
+  const enterFullscreen = useCallback(() => {
+    const el = wrapRef.current;
+    if (el && !document.fullscreenElement) {
+      el.requestFullscreen?.().catch(() => {});
+    }
+  }, []);
+
+  const exitFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.().catch(() => {});
+    }
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      exitFullscreen();
+    } else {
+      enterFullscreen();
+    }
+  }, [enterFullscreen, exitFullscreen]);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
 
   const start = useCallback(() => {
     setScore(0);
     setCoinsCollected(0);
     setState("playing");
-  }, []);
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) enterFullscreen();
+  }, [enterFullscreen]);
 
   useEffect(() => {
     if (state !== "playing") return;
@@ -706,10 +736,43 @@ export function MayluRunner() {
     <div className="mx-auto w-full max-w-3xl select-none" ref={wrapRef}>
       <div className="mb-2 flex items-center justify-between px-1">
         <p className="font-display text-lg font-bold text-cocoa">Maylu Run 🐾</p>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <p className="text-sm text-cocoa/70">
             Mejor: <span className="font-bold text-cocoa">{best}</span>
           </p>
+          <button
+            onClick={toggleFullscreen}
+            className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg border border-cocoa/20 bg-cream text-cocoa transition hover:bg-butter/60"
+            aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+          >
+            {isFullscreen ? (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+              </svg>
+            ) : (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
 
@@ -781,6 +844,14 @@ export function MayluRunner() {
                 >
                   Ayudar a Maylu 💛
                 </Link>
+                {isFullscreen && (
+                  <button
+                    onClick={exitFullscreen}
+                    className="w-full rounded-full border border-cream/60 px-6 py-2.5 font-display text-sm font-bold text-cream/80 transition hover:text-cream active:scale-95"
+                  >
+                    Salir de pantalla completa
+                  </button>
+                )}
               </div>
             </div>
           </div>
