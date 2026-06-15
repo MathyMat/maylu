@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Link } from "@tanstack/react-router";
+import { photos } from "@/lib/maylu-photos";
 
 type GameState = "idle" | "playing" | "gameover";
 
-const W = 720;
-const H = 260;
-const GROUND_Y = 210;
-const GRAVITY = 0.65;
-const JUMP_V = -14;
-const BASE_SPEED = 2.8;
+const W = 800;
+const H = 300;
+const GROUND_Y = 245;
+const GRAVITY = 0.76;
+const JUMP_V = -16;
+const BASE_SPEED = 3.1;
 
 type Obstacle = {
   x: number;
@@ -80,49 +81,37 @@ const C = {
 export function MayluRunner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const dogImgRef = useRef<HTMLImageElement | null>(null);
+  const pateImgRef = useRef<HTMLImageElement | null>(null);
   const [state, setState] = useState<GameState>("idle");
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
   const [coinsCollected, setCoinsCollected] = useState(0);
   const [fact, setFact] = useState<string>(() => randomFact());
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const jumpPressedRef = useRef(false);
   const duckPressedRef = useRef(false);
 
-  const enterFullscreen = useCallback(() => {
-    const el = wrapRef.current;
-    if (el && !document.fullscreenElement) {
-      el.requestFullscreen?.().catch(() => {});
-    }
-  }, []);
-
-  const exitFullscreen = useCallback(() => {
-    if (document.fullscreenElement) {
-      document.exitFullscreen?.().catch(() => {});
-    }
-  }, []);
-
-  const toggleFullscreen = useCallback(() => {
-    if (document.fullscreenElement) {
-      exitFullscreen();
-    } else {
-      enterFullscreen();
-    }
-  }, [enterFullscreen, exitFullscreen]);
-
   useEffect(() => {
-    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", onChange);
-    return () => document.removeEventListener("fullscreenchange", onChange);
+    const dog = new Image();
+    dog.src = photos.maylugame;
+    dogImgRef.current = dog;
+    const pate = new Image();
+    pate.src = photos.pate;
+    pateImgRef.current = pate;
   }, []);
+
+  const expand = useCallback(() => setExpanded(true), []);
+  const collapse = useCallback(() => setExpanded(false), []);
+  const toggleExpand = useCallback(() => setExpanded((v) => !v), []);
 
   const start = useCallback(() => {
     setScore(0);
     setCoinsCollected(0);
     setState("playing");
     const isMobile = window.innerWidth < 768;
-    if (isMobile) enterFullscreen();
-  }, [enterFullscreen]);
+    if (isMobile) expand();
+  }, [expand]);
 
   useEffect(() => {
     if (state !== "playing") return;
@@ -130,9 +119,10 @@ export function MayluRunner() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
 
     let raf = 0;
-    let dogX = 70;
+    let dogX = 80;
     let dogY = GROUND_Y;
     let dogV = 0;
     let jumpsLeft = 2;
@@ -141,9 +131,9 @@ export function MayluRunner() {
     let coins: Coin[] = [];
     let particles: Particle[] = [];
     let clouds: Cloud[] = [
-      { x: 100, y: 30, w: 80, speed: 0.3 },
-      { x: 320, y: 20, w: 60, speed: 0.2 },
-      { x: 560, y: 40, w: 100, speed: 0.25 },
+      { x: 120, y: 40, w: 90, speed: 0.3 },
+      { x: 360, y: 25, w: 70, speed: 0.2 },
+      { x: 620, y: 50, w: 110, speed: 0.25 },
     ];
     let frame = 0;
     let speed = BASE_SPEED;
@@ -262,25 +252,25 @@ export function MayluRunner() {
       else kind = "cone";
 
       if (kind === "bird") {
-        const flyH = Math.random() < 0.5 ? 65 : 95;
-        obstacles.push({ x: W + 20, w: 30, h: 20, y: GROUND_Y - flyH, kind });
+        const flyH = Math.random() < 0.5 ? 76 : 111;
+        obstacles.push({ x: W + 20, w: 36, h: 24, y: GROUND_Y - flyH, kind });
       } else if (kind === "cactus") {
-        obstacles.push({ x: W + 20, w: 18, h: 38, y: GROUND_Y - 38, kind });
+        obstacles.push({ x: W + 20, w: 22, h: 44, y: GROUND_Y - 44, kind });
       } else if (kind === "syringe") {
-        obstacles.push({ x: W + 20, w: 28, h: 14, y: GROUND_Y - 14, kind });
+        obstacles.push({ x: W + 20, w: 32, h: 16, y: GROUND_Y - 16, kind });
       } else if (kind === "pill") {
-        obstacles.push({ x: W + 20, w: 22, h: 22, y: GROUND_Y - 22, kind });
+        obstacles.push({ x: W + 20, w: 26, h: 26, y: GROUND_Y - 26, kind });
       } else {
-        obstacles.push({ x: W + 20, w: 20, h: 30, y: GROUND_Y - 30, kind });
+        obstacles.push({ x: W + 20, w: 24, h: 35, y: GROUND_Y - 35, kind });
       }
     };
 
     const spawnCoin = () => {
       const row = Math.random() < 0.3;
-      const baseY = GROUND_Y - 45 - Math.random() * 60;
+      const baseY = GROUND_Y - 52 - Math.random() * 70;
       const count = row ? 3 : 1;
       for (let i = 0; i < count; i++) {
-        coins.push({ x: W + 20 + i * 36, y: baseY, taken: false, pulse: i * 0.8 });
+        coins.push({ x: W + 20 + i * 40, y: baseY, taken: false, pulse: i * 0.8 });
       }
     };
 
@@ -298,87 +288,21 @@ export function MayluRunner() {
     };
 
     const drawDog = (x: number, y: number) => {
+      const img = dogImgRef.current;
+      if (!img) return;
       ctx.save();
       if (shakeFrames > 0) {
         ctx.translate((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3);
       }
 
-      const bodyH = ducking ? 9 : 13;
-      const bodyOffY = ducking ? -9 : -16;
-      const legLen = ducking ? 5 : 9;
-      const legPhase = Math.floor(frame / 5) % 2;
-
       ctx.fillStyle = "rgba(0,0,0,0.12)";
       ctx.beginPath();
-      ctx.ellipse(x + 26, GROUND_Y + 4, 22, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(x + 30, GROUND_Y + 4, 30, 6, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.beginPath();
-      ctx.moveTo(x + 2, y - 20);
-      const tailWag = Math.sin(frame * 0.25) * 8;
-      ctx.quadraticCurveTo(x - 12, y - 28 + tailWag, x - 5, y - 34 + tailWag);
-      ctx.lineWidth = 3.5;
-      ctx.strokeStyle = C.dog;
-      ctx.lineCap = "round";
-      ctx.stroke();
-
-      ctx.fillStyle = C.dog;
-      ctx.beginPath();
-      ctx.ellipse(x + 24, y + bodyOffY, 23, bodyH, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = C.dog;
-      const l1 = legPhase ? legLen + 3 : legLen;
-      const l2 = legPhase ? legLen : legLen + 3;
-      ctx.beginPath();
-      ctx.roundRect(x + 10, y - 6, 5, l1, 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.roundRect(x + 36, y - 6, 5, l2, 2);
-      ctx.fill();
-
-      const headY = ducking ? y - 12 : y - 24;
-      const headX = ducking ? x + 52 : x + 46;
-      ctx.fillStyle = C.dog;
-      ctx.beginPath();
-      ctx.ellipse(headX, headY, 11, 9, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(headX - 5, headY - 9);
-      ctx.lineTo(headX - 1, headY - 20);
-      ctx.lineTo(headX + 4, headY - 9);
-      ctx.fill();
-
-      ctx.fillStyle = C.dogAccent;
-      ctx.beginPath();
-      ctx.ellipse(headX + 8, headY + 2, 6, 4, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "#1a0e08";
-      ctx.beginPath();
-      ctx.ellipse(headX + 12, headY + 1, 2, 1.5, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = C.white;
-      ctx.beginPath();
-      ctx.ellipse(headX + 2, headY - 2, 3, 3, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#1a0e08";
-      ctx.beginPath();
-      ctx.ellipse(headX + 3, headY - 2, 2, 2, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = C.white;
-      ctx.beginPath();
-      ctx.ellipse(headX + 4, headY - 3, 0.8, 0.8, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (speed > 7) {
-        ctx.fillStyle = C.red;
-        ctx.beginPath();
-        ctx.ellipse(headX + 9, headY + 7, 2.5, 4, 0.3, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      const dw = ducking ? 88 : 72;
+      const dh = ducking ? 24 : 56;
+      ctx.drawImage(img, x, y - dh, dw, dh);
 
       ctx.restore();
     };
@@ -509,30 +433,20 @@ export function MayluRunner() {
 
     const drawCoin = (c: Coin) => {
       if (c.taken) return;
+      const img = pateImgRef.current;
+      if (!img) return;
       c.pulse += 0.12;
       const bounce = Math.sin(c.pulse) * 3;
       const y = c.y + bounce;
-      const r = 9;
+      const s = 18;
 
-      ctx.strokeStyle = "rgba(255, 217, 61, 0.35)";
-      ctx.lineWidth = 5;
+      ctx.strokeStyle = "rgba(255, 217, 61, 0.3)";
+      ctx.lineWidth = 7;
       ctx.beginPath();
-      ctx.arc(c.x, y, r + 4, 0, Math.PI * 2);
+      ctx.arc(c.x, y, s + 5, 0, Math.PI * 2);
       ctx.stroke();
 
-      ctx.fillStyle = C.coin;
-      ctx.beginPath();
-      ctx.arc(c.x, y, r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = C.coinEdge;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      ctx.fillStyle = C.cocoa;
-      ctx.font = "bold 11px system-ui";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("🦴", c.x, y + 1);
+      ctx.drawImage(img, c.x - s, y - s, s * 2, s * 2);
     };
 
     const drawParticles = () => {
@@ -561,25 +475,25 @@ export function MayluRunner() {
       ctx.fillRect(0, GROUND_Y + 2, W, H - GROUND_Y - 2);
 
       ctx.strokeStyle = C.ground;
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(0, GROUND_Y + 2);
       ctx.lineTo(W, GROUND_Y + 2);
       ctx.stroke();
 
       ctx.fillStyle = C.coinEdge;
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 11; i++) {
         const raw = i * 90 - frame * speed * 0.6;
         const x = ((raw % (W + 90)) + (W + 90)) % (W + 90);
-        ctx.fillRect(x, GROUND_Y + 10, 30, 2);
+        ctx.fillRect(x, GROUND_Y + 12, 32, 2);
       }
 
       ctx.fillStyle = "rgba(180,130,60,0.5)";
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 9; i++) {
         const raw = i * 100 + 30 - frame * speed * 0.8;
         const x = ((raw % (W + 100)) + (W + 100)) % (W + 100);
         ctx.beginPath();
-        ctx.ellipse(x, GROUND_Y + 6, 3, 2, 0, 0, Math.PI * 2);
+        ctx.ellipse(x, GROUND_Y + 7, 3, 2.5, 0, 0, Math.PI * 2);
         ctx.fill();
       }
     };
@@ -599,15 +513,15 @@ export function MayluRunner() {
       const sunSize = 20 + Math.sin(frame * 0.01) * 2;
       ctx.fillStyle = t > 0.5 ? "#FFD93D" : "#ffa040";
       ctx.beginPath();
-      ctx.arc(W - 70, 44, sunSize, 0, Math.PI * 2);
+      ctx.arc(W - 80, 50, sunSize, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = t > 0.5 ? "rgba(255,217,61,0.4)" : "rgba(255,160,64,0.4)";
       ctx.lineWidth = 2;
       for (let i = 0; i < 8; i++) {
         const a = (Math.PI * 2 * i) / 8 + frame * 0.005;
         ctx.beginPath();
-        ctx.moveTo(W - 70 + Math.cos(a) * (sunSize + 4), 44 + Math.sin(a) * (sunSize + 4));
-        ctx.lineTo(W - 70 + Math.cos(a) * (sunSize + 12), 44 + Math.sin(a) * (sunSize + 12));
+        ctx.moveTo(W - 80 + Math.cos(a) * (sunSize + 4), 50 + Math.sin(a) * (sunSize + 4));
+        ctx.lineTo(W - 80 + Math.cos(a) * (sunSize + 12), 50 + Math.sin(a) * (sunSize + 12));
         ctx.stroke();
       }
 
@@ -631,13 +545,13 @@ export function MayluRunner() {
       nextSpawn--;
       if (nextSpawn <= 0) {
         spawnObstacle();
-        const diff = Math.min(40, localScore / 60);
-        nextSpawn = Math.max(45, 85 + Math.floor(Math.random() * 80) - diff);
+        const diff = Math.min(45, localScore / 55);
+        nextSpawn = Math.max(50, 95 + Math.floor(Math.random() * 90) - diff);
       }
       nextCoin--;
       if (nextCoin <= 0) {
         spawnCoin();
-        nextCoin = 130 + Math.floor(Math.random() * 160);
+        nextCoin = 145 + Math.floor(Math.random() * 180);
       }
 
       obstacles.forEach((o) => (o.x -= speed));
@@ -651,14 +565,14 @@ export function MayluRunner() {
       drawParticles();
 
       const dogBox = ducking
-        ? { x: dogX + 4, y: dogY - 16, w: 58, h: 16 }
-        : { x: dogX + 8, y: dogY - 36, w: 46, h: 36 };
+        ? { x: dogX + 2, y: dogY - 24, w: 88, h: 24 }
+        : { x: dogX + 4, y: dogY - 56, w: 66, h: 56 };
 
       for (const c of coins) {
         if (c.taken) continue;
         const dx = c.x - (dogBox.x + dogBox.w / 2);
         const dy = c.y - (dogBox.y + dogBox.h / 2);
-        if (dx * dx + dy * dy < 26 * 26) {
+        if (dx * dx + dy * dy < 30 * 30) {
           c.taken = true;
           localCoins++;
           localScore += 30;
@@ -697,26 +611,26 @@ export function MayluRunner() {
 
       ctx.fillStyle = "rgba(92,58,30,0.85)";
       ctx.beginPath();
-      ctx.roundRect(W - 120, 8, 112, 30, 8);
+      ctx.roundRect(W - 130, 8, 122, 32, 8);
       ctx.fill();
       ctx.fillStyle = C.cream;
       ctx.font = "bold 16px Fredoka, system-ui";
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
-      ctx.fillText(`${localScore}`, W - 14, 23);
+      ctx.fillText(`${localScore}`, W - 14, 24);
 
       ctx.fillStyle = "rgba(92,58,30,0.85)";
       ctx.beginPath();
-      ctx.roundRect(8, 8, 90, 30, 8);
+      ctx.roundRect(8, 8, 95, 32, 8);
       ctx.fill();
       ctx.fillStyle = C.cream;
       ctx.textAlign = "left";
-      ctx.fillText(`🦴 ${localCoins}`, 16, 23);
+      ctx.fillText(`🥫 ${localCoins}`, 16, 24);
 
       const speedPct = Math.min(1, (speed - BASE_SPEED) / 5.5);
       if (speedPct > 0.3) {
         ctx.fillStyle = "rgba(233,77,77,0.15)";
-        ctx.fillRect(0, 0, W * speedPct, 3);
+        ctx.fillRect(0, 0, W * speedPct, 4);
       }
 
       raf = requestAnimationFrame(loop);
@@ -732,166 +646,199 @@ export function MayluRunner() {
     };
   }, [state]);
 
+  const expandedStyles = `
+    @keyframes expandIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    @keyframes collapseOut {
+      from { transform: scale(1); opacity: 1; }
+      to   { transform: scale(0.92); opacity: 0; }
+    }
+  `;
+
   return (
-    <div className="mx-auto w-full max-w-3xl select-none" ref={wrapRef}>
-      <div className="mb-2 flex items-center justify-between px-1">
-        <p className="font-display text-lg font-bold text-cocoa">Maylu Run 🐾</p>
-        <div className="flex items-center gap-2">
-          <p className="text-sm text-cocoa/70">
-            Mejor: <span className="font-bold text-cocoa">{best}</span>
-          </p>
-          <button
-            onClick={toggleFullscreen}
-            className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg border border-cocoa/20 bg-cream text-cocoa transition hover:bg-butter/60"
-            aria-label={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
-          >
-            {isFullscreen ? (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
-              </svg>
-            ) : (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      <div className="relative overflow-hidden rounded-2xl border-2 border-cocoa bg-cream shadow-xl">
-        <canvas
-          ref={canvasRef}
-          width={W}
-          height={H}
-          className="block h-auto max-h-[48vh] w-full touch-none"
-          style={{ aspectRatio: `${W}/${H}` }}
-        />
-
-        {state === "idle" && (
-          <div className="absolute inset-0 flex items-center justify-center bg-cocoa/75 backdrop-blur-[2px]">
-            <div className="max-w-sm px-6 text-center text-cream">
-              <p className="text-5xl mb-2">🐾</p>
-              <h3 className="font-display text-2xl font-bold">Maylu Run</h3>
-              <p className="mt-2 text-sm opacity-90 leading-relaxed">
-                Ayuda a Maylu a esquivar obstáculos y recoger monedas 💰
-              </p>
-              <button
-                onClick={start}
-                className="mt-4 rounded-full bg-butter px-8 py-3 font-display font-bold text-cocoa text-lg shadow-lg active:scale-95 transition-transform"
-              >
-                ¡Jugar!
-              </button>
-              <p className="mt-3 text-xs opacity-60 leading-relaxed">
-                <span className="hidden sm:inline">Espacio / ↑ saltar · ↓ agacharse · </span>
-                Doble salto disponible
-              </p>
-            </div>
+    <>
+      <style>{expandedStyles}</style>
+      <div
+        ref={wrapRef}
+        className={
+          expanded
+            ? "fixed inset-0 z-50 flex flex-col bg-cream select-none [animation:expandIn_0.25s_ease-out]"
+            : "mx-auto w-full max-w-3xl select-none"
+        }
+      >
+        <div className="flex items-center justify-between px-4 py-3 md:px-1 md:py-0 md:mb-2">
+          <p className="font-display text-lg font-bold text-cocoa">Maylu Run 🐾</p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-cocoa/70">
+              Mejor: <span className="font-bold text-cocoa">{best}</span>
+            </p>
+            <button
+              onClick={toggleExpand}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-cocoa/20 bg-cream text-cocoa transition hover:bg-butter/60"
+              aria-label={expanded ? "Reducir" : "Expandir"}
+            >
+              {expanded ? (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                >
+                  <polyline points="4 14 10 14 10 20" />
+                  <polyline points="20 10 14 10 14 4" />
+                  <line x1="14" y1="10" x2="21" y2="3" />
+                  <line x1="3" y1="21" x2="10" y2="14" />
+                </svg>
+              ) : (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                >
+                  <polyline points="15 3 21 3 21 9" />
+                  <polyline points="9 21 3 21 3 15" />
+                  <line x1="21" y1="3" x2="14" y2="10" />
+                  <line x1="3" y1="21" x2="10" y2="14" />
+                </svg>
+              )}
+            </button>
           </div>
-        )}
+        </div>
 
-        {state === "gameover" && (
-          <div className="absolute inset-0 flex items-center justify-center bg-cocoa/88 backdrop-blur-[2px] px-4">
-            <div className="w-full max-w-md text-center text-cream">
-              <p className="text-3xl mb-1">💥</p>
-              <h3 className="font-display text-2xl font-bold">¡Game Over!</h3>
-              <div className="flex justify-center gap-6 mt-1 text-sm">
-                <span>
-                  Puntaje: <strong>{score}</strong>
-                </span>
-                <span>
-                  💰 <strong>{coinsCollected}</strong>
-                </span>
-                {score === best && score > 0 && (
-                  <span className="text-butter font-bold">⭐ ¡Nuevo récord!</span>
-                )}
-              </div>
+        <div
+          className={
+            expanded
+              ? "relative flex-1 overflow-hidden bg-cream"
+              : "relative overflow-hidden rounded-2xl border-2 border-cocoa bg-cream shadow-xl"
+          }
+        >
+          <canvas
+            ref={canvasRef}
+            width={W}
+            height={H}
+            className={
+              expanded ? "block h-full w-full touch-none" : "block h-auto w-full touch-none"
+            }
+            style={{ aspectRatio: `${W}/${H}` }}
+          />
 
-              <div className="mt-3 rounded-xl border border-butter/40 bg-white/10 p-3 text-left">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-butter mb-1">
-                  ¿Sabías que? · Viringo peruano
+          {state === "idle" && (
+            <div className="absolute inset-0 flex items-center justify-center bg-cocoa/75 backdrop-blur-[2px]">
+              <div className="max-w-sm px-6 text-center text-cream">
+                <p className="text-5xl mb-2">🐾</p>
+                <h3 className="font-display text-2xl font-bold">Maylu Run</h3>
+                <p className="mt-2 text-sm opacity-90 leading-relaxed">
+                  Ayuda a Maylu a esquivar obstáculos y recoger paté 🥫
                 </p>
-                <p className="text-sm leading-snug">{fact}</p>
-              </div>
-
-              <div className="mt-4 flex flex-wrap justify-center gap-2">
                 <button
                   onClick={start}
-                  className="rounded-full bg-butter px-6 py-2.5 font-display font-bold text-cocoa active:scale-95 transition-transform"
+                  className="mt-4 rounded-full bg-butter px-8 py-3 font-display font-bold text-cocoa text-lg shadow-lg active:scale-95 transition-transform"
                 >
-                  Reintentar
+                  ¡Jugar!
                 </button>
-                <Link
-                  to="/ayuda"
-                  className="rounded-full border-2 border-cream px-6 py-2.5 font-display font-bold text-cream active:scale-95 transition-transform"
-                >
-                  Ayudar a Maylu 💛
-                </Link>
-                {isFullscreen && (
-                  <button
-                    onClick={exitFullscreen}
-                    className="w-full rounded-full border border-cream/60 px-6 py-2.5 font-display text-sm font-bold text-cream/80 transition hover:text-cream active:scale-95"
-                  >
-                    Salir de pantalla completa
-                  </button>
-                )}
+                <p className="mt-3 text-xs opacity-60 leading-relaxed">
+                  <span className="hidden sm:inline">Espacio / ↑ saltar · ↓ agacharse · </span>
+                  Doble salto disponible
+                </p>
               </div>
             </div>
+          )}
+
+          {state === "gameover" && (
+            <div className="absolute inset-0 flex items-center justify-center bg-cocoa/88 backdrop-blur-[2px] px-4">
+              <div className="w-full max-w-md text-center text-cream">
+                <p className="text-3xl mb-1">💥</p>
+                <h3 className="font-display text-2xl font-bold">¡Game Over!</h3>
+                <div className="flex justify-center gap-6 mt-1 text-sm">
+                  <span>
+                    Puntaje: <strong>{score}</strong>
+                  </span>
+                  <span>
+                    🥫 <strong>{coinsCollected}</strong>
+                  </span>
+                  {score === best && score > 0 && (
+                    <span className="text-butter font-bold">⭐ ¡Nuevo récord!</span>
+                  )}
+                </div>
+
+                <div className="mt-3 rounded-xl border border-butter/40 bg-white/10 p-3 text-left">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-butter mb-1">
+                    ¿Sabías que? · Viringo peruano
+                  </p>
+                  <p className="text-sm leading-snug">{fact}</p>
+                </div>
+
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  <button
+                    onClick={start}
+                    className="rounded-full bg-butter px-6 py-2.5 font-display font-bold text-cocoa active:scale-95 transition-transform"
+                  >
+                    Reintentar
+                  </button>
+                  <Link
+                    to="/ayuda"
+                    className="rounded-full border-2 border-cream px-6 py-2.5 font-display font-bold text-cream active:scale-95 transition-transform"
+                  >
+                    Ayudar a Maylu 💛
+                  </Link>
+                  {expanded && (
+                    <button
+                      onClick={collapse}
+                      className="w-full rounded-full border border-cream/60 px-6 py-2.5 font-display text-sm font-bold text-cream/80 transition hover:text-cream active:scale-95"
+                    >
+                      Reducir
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {state === "playing" && (
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
+            <button
+              className="rounded-2xl bg-cocoa py-4 text-xl font-bold text-cream shadow-md transition-all active:scale-95 active:bg-cocoa/70 touch-none"
+              onPointerDown={(e) => {
+                e.preventDefault();
+                jumpPressedRef.current = true;
+              }}
+            >
+              Saltar
+            </button>
+            <button
+              className="rounded-2xl border-2 border-cocoa bg-cream/80 py-4 text-xl font-bold text-cocoa shadow-md transition-all active:scale-95 active:bg-cocoa/10 touch-none"
+              onPointerDown={(e) => {
+                e.preventDefault();
+                duckPressedRef.current = true;
+              }}
+              onPointerUp={() => {
+                duckPressedRef.current = false;
+              }}
+              onPointerLeave={() => {
+                duckPressedRef.current = false;
+              }}
+            >
+              Agachar
+            </button>
           </div>
         )}
+
+        {state === "playing" && (
+          <p className="mt-2 text-center text-xs text-cocoa/50 hidden sm:block">
+            Espacio / ↑ saltar (doble salto) · ↓ agacharse
+          </p>
+        )}
       </div>
-
-      {state === "playing" && (
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
-          <button
-            className="rounded-2xl bg-cocoa py-4 text-xl font-bold text-cream shadow-md transition-all active:scale-95 active:bg-cocoa/70 touch-none"
-            onPointerDown={(e) => {
-              e.preventDefault();
-              jumpPressedRef.current = true;
-            }}
-          >
-            Saltar
-          </button>
-          <button
-            className="rounded-2xl border-2 border-cocoa bg-cream/80 py-4 text-xl font-bold text-cocoa shadow-md transition-all active:scale-95 active:bg-cocoa/10 touch-none"
-            onPointerDown={(e) => {
-              e.preventDefault();
-              duckPressedRef.current = true;
-            }}
-            onPointerUp={() => {
-              duckPressedRef.current = false;
-            }}
-            onPointerLeave={() => {
-              duckPressedRef.current = false;
-            }}
-          >
-            Agachar
-          </button>
-        </div>
-      )}
-
-      {state === "playing" && (
-        <p className="mt-2 text-center text-xs text-cocoa/50 hidden sm:block">
-          Espacio / ↑ saltar (doble salto) · ↓ agacharse
-        </p>
-      )}
-    </div>
+    </>
   );
 }

@@ -9,6 +9,12 @@ import adultStreet from "@/assets/maylu/maylufotos/WP_20140131_001.jpg";
 import chocotejas from "@/assets/maylu/maylufotos/chocotejas.jpg";
 import mayluVet from "@/assets/maylu/maylufotos/mayluvet.jpg";
 import mayluDiag from "@/assets/maylu/maylufotos/mayludiag.jpg";
+import maylugame from "@/assets/maylu/maylufotos/maylugame.png";
+import maylugame2 from "@/assets/maylu/maylufotos/maylugame2.jpg";
+import pate from "@/assets/maylu/maylufotos/pate.png";
+import maylurun from "@/assets/maylu/maylufotos/maylurun.jpg";
+import paloma from "@/assets/maylu/maylufotos/paloma.png";
+import gato from "@/assets/maylu/maylufotos/gato.png";
 
 export const photos = {
   portrait,
@@ -23,4 +29,10 @@ export const photos = {
   vetSitting: mayluVet,
   vetDiag: mayluDiag,
   vetLying: polkaDot,
+  maylugame,
+  maylugame2,
+  pate,
+  maylurun,
+  paloma,
+  gato,
 };

@@ -90,7 +90,7 @@ function Ayuda() {
           <p className="mt-4 text-sm font-bold text-cocoa">🚚 Envío gratis</p>
 
           <a
-            href={waLink("Hola! Quiero pedir chocotejas Pompompurin para apoyar a Maylu 🐾")}
+            href={waLink("Hola! Quiero pedir chocotejas Pompompurin para apoyar a Maylu")}
             target="_blank"
             rel="noreferrer"
             className="mt-5 block rounded-full bg-cocoa py-3 text-center font-display font-bold text-cream shadow-lg transition hover:scale-[1.02]"
@@ -122,7 +122,7 @@ function Ayuda() {
 
           <a
             href={waLink(
-              "Hola! Me interesa la instalación de Office a S/10 para apoyar a Maylu 🐾",
+              "Hola! Me interesa la instalación de Office a S/10 para apoyar a Maylu",
             )}
             target="_blank"
             rel="noreferrer"
@@ -139,18 +139,12 @@ function Ayuda() {
                 Donación directa por Yape / Plin 💛
               </h2>
               <p className="mt-1 text-sm text-cocoa/80 sm:text-base">
-                Si quieres apoyar a salvar a mi niño, escríbeme por WhatsApp al{" "}
-                {CONFIG.whatsappDisplay}.
+                También puedes donar directo por Yape o Plín al número:
               </p>
             </div>
-            <a
-              href={waLink(`Hola! Quiero donar para Maylu 💛 ¿Me pasas tu Yape al ${CONFIG.yape}?`)}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full rounded-full bg-cocoa px-6 py-3 text-center font-display font-bold text-cream shadow-lg sm:w-auto"
-            >
-              Pedir Yape
-            </a>
+            <p className="font-display text-3xl font-bold tracking-wider text-cocoa sm:text-4xl">
+              939 266 007
+            </p>
           </div>
         </article>
 

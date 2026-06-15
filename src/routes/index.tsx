@@ -157,6 +157,24 @@ function Index() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-4 py-6 md:py-8">
+        <div className="rounded-3xl border-2 border-cocoa bg-butter/80 p-5 sm:p-7">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="font-display text-xl font-bold text-cocoa sm:text-2xl">
+                Donación directa por Yape / Plin 💛
+              </h2>
+              <p className="mt-1 text-sm text-cocoa/80 sm:text-base">
+                También puedes donar directo al número de abajo.
+              </p>
+            </div>
+            <p className="font-display text-3xl font-bold tracking-wider text-cocoa sm:text-4xl">
+              939 266 007
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="text-center font-display text-2xl font-bold text-cocoa sm:text-3xl">
           13 años de momentos juntos
@@ -185,16 +203,16 @@ function Index() {
         <div className="rounded-3xl bg-butter p-6 text-center shadow-[0_10px_0_-2px_var(--color-honey)] sm:p-8">
           <p className="text-4xl sm:text-5xl">🎮</p>
           <h2 className="mt-2 font-display text-2xl font-bold text-cocoa sm:text-3xl">
-            Juega y conoce la historia de Maylu
+            Catálogo de juegos
           </h2>
           <p className="mt-2 text-sm text-cocoa/80 sm:text-base">
-            Un mini-juego estilo dinosaurio que te cuenta su vida, foto por foto.
+            ¡El protagonista es Maylu!.
           </p>
           <Link
             to="/juego"
             className="mt-5 inline-flex w-full justify-center rounded-full bg-cocoa px-6 py-3 font-display font-bold text-cream shadow-lg transition hover:scale-105 sm:w-auto"
           >
-            Jugar Maylu Run
+            Ver catálogo →
           </Link>
         </div>
       </section>
