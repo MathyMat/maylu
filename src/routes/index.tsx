@@ -124,7 +124,7 @@ function Index() {
             </Link>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
             <div className="overflow-hidden rounded-3xl bg-butter/70 p-5">
               <img
                 src={photos.chocotejas}
@@ -145,6 +145,15 @@ function Index() {
               <p className="font-display text-xl font-bold text-cocoa">Instalación de Office</p>
               <p className="mt-2 text-sm text-cocoa/80">
                 Soporte permanente para dejar todo listo en tu computadora.
+              </p>
+            </div>
+            <div className="rounded-3xl bg-honey/30 p-5">
+              <div className="mb-4 flex aspect-[16/10] items-center justify-center rounded-2xl bg-white/60">
+                <p className="text-6xl">❤️</p>
+              </div>
+              <p className="font-display text-xl font-bold text-cocoa">GoFundMe</p>
+              <p className="mt-2 text-sm text-cocoa/80">
+                Donación internacional para la cirugía urgente de Maylu.
               </p>
             </div>
           </div>

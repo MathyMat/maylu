@@ -140,7 +140,7 @@ function Ayuda() {
           </a>
         </article>
 
-        {/* Donación */}
+        {/* Donación por Yape */}
         <article className="rounded-3xl border-2 border-cocoa bg-butter p-7 md:col-span-2">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -158,6 +158,28 @@ function Ayuda() {
               className="rounded-full bg-cocoa px-6 py-3 font-display font-bold text-cream shadow-lg"
             >
               Pedir Yape
+            </a>
+          </div>
+        </article>
+
+        {/* GoFundMe */}
+        <article className="rounded-3xl border-2 border-honey bg-white p-7 md:col-span-2">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="font-display text-2xl font-bold text-cocoa">
+                GoFundMe — Donación internacional ❤️
+              </h2>
+              <p className="mt-1 text-cocoa/80">
+                Si quieres ayudar desde el extranjero, tengo una campaña en GoFundMe para la cirugía urgente de Maylu.
+              </p>
+            </div>
+            <a
+              href="https://www.gofundme.com/f/help-maylu-get-the-surgery-he-urgently-needs"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-honey px-6 py-3 font-display font-bold text-cocoa shadow-lg hover:scale-105 transition"
+            >
+              Ir a GoFundMe
             </a>
           </div>
         </article>
