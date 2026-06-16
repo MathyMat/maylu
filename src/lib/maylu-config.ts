@@ -4,7 +4,7 @@ export const CONFIG = {
   whatsappDisplay: "+51 939 266 007",
   yape: "+51 939 266 007",
   meta: 3000, // meta en soles
-  recaudado: 124, // monto recaudado actual
+  recaudado: 143, // monto recaudado actual
   dogName: "Maylu",
   dogBreed: "Viringo Peruano",
   dogAge: 13,
