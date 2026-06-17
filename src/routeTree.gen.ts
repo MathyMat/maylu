@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root.tsx'
 import { Route as JuegoRouteImport } from './routes/juego.tsx'
 import { Route as HistoriaRouteImport } from './routes/historia.tsx'
+import { Route as GaleriaRouteImport } from './routes/galeria.tsx'
 import { Route as AyudaRouteImport } from './routes/ayuda.tsx'
 import { Route as IndexRouteImport } from './routes/index.tsx'
 
@@ -22,6 +23,11 @@ const JuegoRoute = JuegoRouteImport.update({
 const HistoriaRoute = HistoriaRouteImport.update({
   id: '/historia',
   path: '/historia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaleriaRoute = GaleriaRouteImport.update({
+  id: '/galeria',
+  path: '/galeria',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AyudaRoute = AyudaRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ayuda': typeof AyudaRoute
+  '/galeria': typeof GaleriaRoute
   '/historia': typeof HistoriaRoute
   '/juego': typeof JuegoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ayuda': typeof AyudaRoute
+  '/galeria': typeof GaleriaRoute
   '/historia': typeof HistoriaRoute
   '/juego': typeof JuegoRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ayuda': typeof AyudaRoute
+  '/galeria': typeof GaleriaRoute
   '/historia': typeof HistoriaRoute
   '/juego': typeof JuegoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ayuda' | '/historia' | '/juego'
+  fullPaths: '/' | '/ayuda' | '/galeria' | '/historia' | '/juego'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ayuda' | '/historia' | '/juego'
-  id: '__root__' | '/' | '/ayuda' | '/historia' | '/juego'
+  to: '/' | '/ayuda' | '/galeria' | '/historia' | '/juego'
+  id: '__root__' | '/' | '/ayuda' | '/galeria' | '/historia' | '/juego'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AyudaRoute: typeof AyudaRoute
+  GaleriaRoute: typeof GaleriaRoute
   HistoriaRoute: typeof HistoriaRoute
   JuegoRoute: typeof JuegoRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/historia'
       fullPath: '/historia'
       preLoaderRoute: typeof HistoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galeria': {
+      id: '/galeria'
+      path: '/galeria'
+      fullPath: '/galeria'
+      preLoaderRoute: typeof GaleriaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ayuda': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AyudaRoute: AyudaRoute,
+  GaleriaRoute: GaleriaRoute,
   HistoriaRoute: HistoriaRoute,
   JuegoRoute: JuegoRoute,
 }

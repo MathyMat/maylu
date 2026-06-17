@@ -7,6 +7,7 @@ export function Header() {
   const links = [
     { to: "/", label: "Inicio" },
     { to: "/historia", label: "Historia" },
+    { to: "/galeria", label: "Galería" },
     { to: "/ayuda", label: "Ayudar" },
     { to: "/juego", label: "Juego" },
   ];
