@@ -3,22 +3,9 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Header } from "@/components/maylu/Header";
 import { Footer } from "@/components/maylu/Footer";
 
-const imageModules = import.meta.glob<{ default: string }>(
+const imageGlob = import.meta.glob<{ default: string }>(
   "../assets/maylu/maylugaleria/*.{jpeg,jpg,png}",
-  { eager: true },
 );
-
-const galleryImages = Object.entries(imageModules)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([path, mod]) => ({
-    src: mod.default,
-    alt:
-      path
-        .split(/[/\\]/)
-        .pop()
-        ?.replace(/\.[^.]+$/, "")
-        .replace(/[_-]/g, " ") || "Foto de Maylu",
-  }));
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -39,12 +26,32 @@ export const Route = createFileRoute("/galeria")({
 });
 
 function Galeria() {
+  const [images, setImages] = useState<{ src: string; alt: string }[]>([]);
   const [selected, setSelected] = useState<number | null>(null);
   const [visible, setVisible] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
-  // Stagger animation trigger
   useEffect(() => {
+    const sorted = Object.entries(imageGlob)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([path, load]) => ({
+        path,
+        alt:
+          path
+            .split(/[/\\]/)
+            .pop()
+            ?.replace(/\.[^.]+$/, "")
+            .replace(/[_-]/g, " ") || "Foto de Maylu",
+        load,
+      }));
+    Promise.all(sorted.map((s) => s.load())).then((mods) => {
+      setImages(
+        sorted.map((s, i) => ({
+          src: mods[i].default,
+          alt: s.alt,
+        })),
+      );
+    });
     const timer = setTimeout(() => setVisible(true), 60);
     return () => clearTimeout(timer);
   }, []);
@@ -52,16 +59,16 @@ function Galeria() {
   // Keyboard navigation
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
-      if (selected === null) return;
+      if (selected === null || images.length === 0) return;
       if (e.key === "ArrowRight")
-        setSelected((selected + 1) % galleryImages.length);
+        setSelected((selected + 1) % images.length);
       if (e.key === "ArrowLeft")
         setSelected(
-          (selected - 1 + galleryImages.length) % galleryImages.length,
+          (selected - 1 + images.length) % images.length,
         );
       if (e.key === "Escape") setSelected(null);
     },
-    [selected],
+    [selected, images.length],
   );
 
   useEffect(() => {
@@ -82,13 +89,13 @@ function Galeria() {
     touchStartX.current = e.touches[0].clientX;
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || selected === null) return;
+    if (touchStartX.current === null || selected === null || images.length === 0) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      if (diff > 0) setSelected((selected + 1) % galleryImages.length);
+      if (diff > 0) setSelected((selected + 1) % images.length);
       else
         setSelected(
-          (selected - 1 + galleryImages.length) % galleryImages.length,
+          (selected - 1 + images.length) % images.length,
         );
     }
     touchStartX.current = null;
@@ -111,7 +118,7 @@ function Galeria() {
       {/* Masonry grid */}
       <section className="mx-auto max-w-6xl px-4 pb-24">
         <div className="columns-2 md:columns-3 lg:columns-4 gap-2.5">
-          {galleryImages.map((img, i) => (
+          {images.map((img, i) => (
             <GalleryCard
               key={i}
               img={img}
@@ -168,7 +175,7 @@ function Galeria() {
             onClick={(e) => {
               e.stopPropagation();
               setSelected(
-                (selected - 1 + galleryImages.length) % galleryImages.length,
+                (selected - 1 + images.length) % images.length,
               );
             }}
             className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-cream/90 text-cocoa shadow-md transition hover:bg-butter focus:outline-none focus-visible:ring-2 focus-visible:ring-honey"
@@ -191,8 +198,8 @@ function Galeria() {
           {/* Image */}
           <img
             key={selected}
-            src={galleryImages[selected].src}
-            alt={galleryImages[selected].alt}
+            src={images[selected].src}
+            alt={images[selected].alt}
             className="max-h-[82vh] max-w-[86vw] md:max-w-[78vw] rounded-xl object-contain shadow-2xl"
             onClick={(e) => e.stopPropagation()}
             style={{
@@ -204,7 +211,7 @@ function Galeria() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setSelected((selected + 1) % galleryImages.length);
+              setSelected((selected + 1) % images.length);
             }}
             className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-cream/90 text-cocoa shadow-md transition hover:bg-butter focus:outline-none focus-visible:ring-2 focus-visible:ring-honey"
             aria-label="Foto siguiente"
@@ -225,7 +232,7 @@ function Galeria() {
 
           {/* Counter only — no filename */}
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full bg-cocoa/60 px-4 py-1.5 text-xs tabular-nums text-cream/80 backdrop-blur-sm tracking-wide">
-            {selected + 1} / {galleryImages.length}
+            {selected + 1} / {images.length}
           </div>
         </div>
       )}

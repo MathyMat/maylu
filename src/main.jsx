@@ -1,7 +1,7 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "@tanstack/react-router";
 
+import "./styles.css";
 import { getRouter } from "./router.tsx";
 
 const router = getRouter();
@@ -12,7 +12,5 @@ if (!rootElement) {
 }
 
 createRoot(rootElement).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+  <RouterProvider router={router} />,
 );
