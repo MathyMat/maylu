@@ -7,17 +7,17 @@ import { photos } from "@/lib/maylu-photos";
 import { CONFIG } from "@/lib/maylu-config";
 
 const DONORS = [
-  { name: "Sergio ",    time: "Hoy 12:56 am",    message: "",                                    amount: "S/ 15.00" },
-  { name: "Pablo ",     time: "Hoy 12:37 am",    message: "",                                    amount: "S/ 15.00" },
-  { name: "Artemon *",   time: "Ayer 11:51 pm",   message: "",                 amount: "S/ 2.00"  },
-  { name: "Alia ",      time: "Ayer 11:41 pm",   message: "",                amount: "S/ 2.00"  },
-  { name: "Fabiola ",   time: "Ayer 8:19 pm",    message: "",                          amount: "S/ 3.40"  },
-  { name: "Viviana ",   time: "Hoy 2:10 pm",     message: "",              amount: "S/ 5.00"         },
-  { name: "Viviana ",   time: "Hoy 12:31 pm",    message: "",            amount: "S/ 5.00"  },
-  { name: "Raul ",      time: "Hoy 11:31 am",    message: "",                amount: "S/ 15.00" },
-  { name: "Wilser ",    time: "Hoy 2:04 am",     message: "",                                    amount: "S/ 10.00" },
-  { name: "Yamilet ",   time: "Hoy 1:09 am",     message: "",      amount: "S/ 0.90"  },
-  { name: "Carmen ",    time: "",                 message: "",                                    amount: "S/ 5.00"  },
+  { name: "Sergio Cam*",    time: "Hoy 12:56 am",    message: "",                                    amount: "S/ 15.00" },
+  { name: "Pablo Mor*",     time: "Hoy 12:37 am",    message: "",                                    amount: "S/ 15.00" },
+  { name: "Artemon Osp*",   time: "Ayer 11:51 pm",   message: "",                 amount: "S/ 2.00"  },
+  { name: "Alia Osp*",      time: "Ayer 11:41 pm",   message: "",                amount: "S/ 2.00"  },
+  { name: "Fabiola Mon*",   time: "Ayer 8:19 pm",    message: "",                          amount: "S/ 3.40"  },
+  { name: "Viviana Ven*",   time: "Hoy 2:10 pm",     message: "",              amount: "S/ 5.00"         },
+  { name: "Viviana Ven*",   time: "Hoy 12:31 pm",    message: "",            amount: "S/ 5.00"  },
+  { name: "Raul Jan*",      time: "Hoy 11:31 am",    message: "",                amount: "S/ 15.00" },
+  { name: "Wilser Ant*",    time: "Hoy 2:04 am",     message: "",                                    amount: "S/ 10.00" },
+  { name: "Yamilet Gar*",   time: "Hoy 1:09 am",     message: "",      amount: "S/ 0.90"  },
+  { name: "Carmen Agu*",    time: "Hoy 1:09 am",                 message: "",                                    amount: "S/ 5.00"  },
 ];
 
 const INITIAL_VISIBLE = 5;
