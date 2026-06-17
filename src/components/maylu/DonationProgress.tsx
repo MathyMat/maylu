@@ -20,12 +20,32 @@ export function DonationProgress() {
           {pct}%
         </span>
       </div>
+
       <div className="mt-4 h-4 overflow-hidden rounded-full bg-cream ring-1 ring-butter/60">
         <div
           className="h-full rounded-full bg-gradient-to-r from-honey to-butter transition-all"
           style={{ width: `${Math.max(pct, 3)}%` }}
         />
       </div>
+
+      <a
+        href="#donadores"
+        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-full border-2 border-cocoa/15 py-2 text-sm font-semibold text-cocoa/60 transition hover:border-cocoa/30 hover:text-cocoa"
+      >
+        Ver quiénes donaron
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </a>
     </div>
   );
 }

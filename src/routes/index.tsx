@@ -1,14 +1,31 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Header } from "@/components/maylu/Header";
 import { Footer } from "@/components/maylu/Footer";
 import { DonationProgress } from "@/components/maylu/DonationProgress";
 import { photos } from "@/lib/maylu-photos";
 import { CONFIG } from "@/lib/maylu-config";
 
+const DONORS = [
+  { name: "Sergio ",    time: "Hoy 12:56 am",    message: "",                                    amount: "S/ 15.00" },
+  { name: "Pablo ",     time: "Hoy 12:37 am",    message: "",                                    amount: "S/ 15.00" },
+  { name: "Artemon *",   time: "Ayer 11:51 pm",   message: "",                 amount: "S/ 2.00"  },
+  { name: "Alia ",      time: "Ayer 11:41 pm",   message: "",                amount: "S/ 2.00"  },
+  { name: "Fabiola ",   time: "Ayer 8:19 pm",    message: "",                          amount: "S/ 3.40"  },
+  { name: "Viviana ",   time: "Hoy 2:10 pm",     message: "",              amount: "S/ 5.00"         },
+  { name: "Viviana ",   time: "Hoy 12:31 pm",    message: "",            amount: "S/ 5.00"  },
+  { name: "Raul ",      time: "Hoy 11:31 am",    message: "",                amount: "S/ 15.00" },
+  { name: "Wilser ",    time: "Hoy 2:04 am",     message: "",                                    amount: "S/ 10.00" },
+  { name: "Yamilet ",   time: "Hoy 1:09 am",     message: "",      amount: "S/ 0.90"  },
+  { name: "Carmen ",    time: "",                 message: "",                                    amount: "S/ 5.00"  },
+];
+
+const INITIAL_VISIBLE = 5;
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ayuda a Maylu 🐾 — Colecta urgente" },
+      { title: "Ayuda a Maylu — Colecta urgente" },
       {
         name: "description",
         content:
@@ -25,6 +42,87 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
+
+function DonorList({ id }: { id?: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? DONORS : DONORS.slice(0, INITIAL_VISIBLE);
+
+  return (
+    <section id={id} className="mx-auto max-w-6xl px-4 py-6 md:py-8">
+      <div className="rounded-3xl border-2 border-blush bg-white/80 p-5 sm:p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-display text-xl font-bold text-cocoa sm:text-2xl">
+            Gracias a quienes apoyaron
+          </h2>
+          <span className="rounded-full bg-butter px-3 py-1 text-xs font-semibold text-cocoa">
+            {DONORS.length} personas
+          </span>
+        </div>
+
+        <ul className="divide-y divide-cocoa/8">
+          {visible.map((d, i) => (
+            <li
+              key={i}
+              className="flex items-start justify-between gap-4 py-3"
+              style={{
+                opacity: expanded || i < INITIAL_VISIBLE ? 1 : 0,
+                transition: `opacity 0.3s ease ${(i - INITIAL_VISIBLE) * 60}ms`,
+              }}
+            >
+              {/* Avatar initial + info */}
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-butter text-sm font-bold text-cocoa">
+                  {d.name.charAt(0)}
+                </div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-cocoa text-sm leading-snug">{d.name}</p>
+                  {d.message && (
+                    <p className="mt-0.5 text-xs text-cocoa/60 italic leading-snug truncate max-w-[220px] sm:max-w-sm">
+                      "{d.message}"
+                    </p>
+                  )}
+                  {d.time && (
+                    <p className="mt-0.5 text-[11px] text-cocoa/40">{d.time}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Amount */}
+              {d.amount && (
+                <span className="shrink-0 rounded-full bg-honey/30 px-3 py-1 text-sm font-bold text-cocoa tabular-nums">
+                  {d.amount}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        {DONORS.length > INITIAL_VISIBLE && (
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-full border-2 border-cocoa/20 py-2.5 text-sm font-semibold text-cocoa/70 transition hover:border-cocoa/40 hover:text-cocoa"
+          >
+            {expanded ? (
+              <>
+                Ver menos
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="18 15 12 9 6 15" />
+                </svg>
+              </>
+            ) : (
+              <>
+                Ver los {DONORS.length - INITIAL_VISIBLE} donadores más
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </>
+            )}
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}
 
 function Index() {
   return (
@@ -50,7 +148,7 @@ function Index() {
                 to="/ayuda"
                 className="inline-flex w-full justify-center rounded-full bg-cocoa px-5 md:px-6 py-3 font-display font-bold text-sm md:text-base text-cream shadow-lg transition hover:scale-105 sm:w-auto"
               >
-                💛 Cómo ayudar
+                Cómo ayudar
               </Link>
               <Link
                 to="/historia"
@@ -70,7 +168,7 @@ function Index() {
               style={{ aspectRatio: "4/5" }}
             />
             <div className="absolute -bottom-4 -left-4 rotate-[-6deg] rounded-2xl bg-white px-4 py-2 shadow-lg">
-              <p className="font-display text-sm font-bold text-cocoa">Maylu 🐾</p>
+              <p className="font-display text-sm font-bold text-cocoa">Maylu</p>
               <p className="text-xs text-cocoa/60">desde 2013</p>
             </div>
           </div>
@@ -162,7 +260,7 @@ function Index() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="font-display text-xl font-bold text-cocoa sm:text-2xl">
-                Donación directa por Yape / Plin 💛
+                Donación directa por Yape / Plin
               </h2>
               <p className="mt-1 text-sm text-cocoa/80 sm:text-base">
                 También puedes donar directo al número de abajo.
@@ -174,6 +272,9 @@ function Index() {
           </div>
         </div>
       </section>
+
+      {/* Donor list — right after Yape/Plin section */}
+      <DonorList id="donadores" />
 
       <section className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="text-center font-display text-2xl font-bold text-cocoa sm:text-3xl">
@@ -201,12 +302,11 @@ function Index() {
 
       <section className="mx-auto max-w-4xl px-4 py-12">
         <div className="rounded-3xl bg-butter p-6 text-center shadow-[0_10px_0_-2px_var(--color-honey)] sm:p-8">
-          <p className="text-4xl sm:text-5xl">🎮</p>
-          <h2 className="mt-2 font-display text-2xl font-bold text-cocoa sm:text-3xl">
+          <h2 className="font-display text-2xl font-bold text-cocoa sm:text-3xl">
             Catálogo de juegos
           </h2>
           <p className="mt-2 text-sm text-cocoa/80 sm:text-base">
-            ¡El protagonista es Maylu!.
+            El protagonista es Maylu.
           </p>
           <Link
             to="/juego"
