@@ -1,14 +1,25 @@
 // Configuración editable de la colecta
+export interface SubMeta {
+  nombre: string;
+  meta: number;
+}
+
 export const CONFIG = {
   whatsapp: "51939266007",
   whatsappDisplay: "+51 939 266 007",
   yape: "+51 939 266 007",
-  meta: 3000, // meta en soles
-  recaudado: 164, // monto recaudado actual
+  meta: 3000, // meta total en soles
+  recaudado: 246, // monto recaudado actual
   dogName: "Maylu",
   dogBreed: "Viringo Peruano",
   dogAge: 13,
   arrivalDate: "10 de marzo de 2013",
+  subMetas: [
+    { nombre: "Hemograma", meta: 180 },
+    { nombre: "Ecografía abdominal", meta: 120 },
+    { nombre: "Placas de tórax y cuello", meta: 240 },
+    { nombre: "Endoscopia", meta: 3000 - 180 - 120 - 240 }, // 2460
+  ] satisfies SubMeta[],
 };
 
 export const waLink = (msg: string) =>
