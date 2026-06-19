@@ -125,8 +125,53 @@ function DonorList({ id }: { id?: string }) {
 }
 
 function Index() {
+  const [imgAnim, setImgAnim] = useState("");
+
+  const animClasses: Record<string, string> = {
+    shake: "animate-shake",
+    bounce: "animate-bounce",
+    wiggle: "animate-wiggle",
+    spin: "animate-spin-half",
+    flip: "animate-flip",
+  };
+
+  const triggers = Object.keys(animClasses);
+
+  function handleImgClick() {
+    const next = triggers[Math.floor(Math.random() * triggers.length)];
+    setImgAnim(next);
+    setTimeout(() => setImgAnim(""), 600);
+  }
+
   return (
     <div className="min-h-screen bg-cream">
+      <style>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0) rotate(0); }
+          20% { transform: translateX(-8px) rotate(-3deg); }
+          40% { transform: translateX(8px) rotate(3deg); }
+          60% { transform: translateX(-6px) rotate(-2deg); }
+          80% { transform: translateX(6px) rotate(2deg); }
+        }
+        @keyframes wiggle {
+          0%, 100% { transform: rotate(0); }
+          25% { transform: rotate(-8deg); }
+          75% { transform: rotate(8deg); }
+        }
+        @keyframes spin-half {
+          0% { transform: rotate(0); }
+          100% { transform: rotate(180deg); }
+        }
+        @keyframes flip {
+          0% { transform: scaleX(1); }
+          50% { transform: scaleX(-1); }
+          100% { transform: scaleX(1); }
+        }
+        .animate-shake { animation: shake 0.5s ease; }
+        .animate-wiggle { animation: wiggle 0.4s ease; }
+        .animate-spin-half { animation: spin-half 0.5s ease; }
+        .animate-flip { animation: flip 0.5s ease; }
+      `}</style>
       <Header />
 
       <section className="relative overflow-hidden">
@@ -160,13 +205,19 @@ function Index() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 -z-10 rounded-[3rem] bg-butter rotate-3" />
-            <img
-              src={photos.portrait}
-              alt="Retrato de Maylu, viringo peruano negro"
-              className="mx-auto w-full max-w-md rounded-[2.5rem] object-cover shadow-2xl"
-              style={{ aspectRatio: "4/5" }}
-            />
+            <div className={`absolute -inset-4 -z-10 rounded-[3rem] bg-butter transition-all duration-300 ${imgAnim === "wiggle" ? "rotate-6 scale-105" : "rotate-3"}`} />
+            <button
+              type="button"
+              onClick={handleImgClick}
+              className="block w-full cursor-pointer [all:unset]"
+            >
+              <img
+                src={photos.portrait}
+                alt="Retrato de Maylu, viringo peruano negro"
+                className={`mx-auto w-full max-w-md rounded-[2.5rem] object-cover shadow-2xl transition-all duration-300 ${imgAnim ? animClasses[imgAnim] : ""} ${imgAnim ? "scale-[1.02]" : ""} cursor-pointer`}
+                style={{ aspectRatio: "4/5" }}
+              />
+            </button>
             <div className="absolute -bottom-4 -left-4 rotate-[-6deg] rounded-2xl bg-white px-4 py-2 shadow-lg">
               <span className="block font-display text-sm font-bold text-cocoa">Maylu</span>
               <span className="block text-xs text-cocoa/60">desde 2013</span>
