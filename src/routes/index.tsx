@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/maylu/Header";
 import { Footer } from "@/components/maylu/Footer";
 import { DonationProgress } from "@/components/maylu/DonationProgress";
 import { Comments } from "@/components/maylu/Comments";
 import { photos } from "@/lib/maylu-photos";
 import { CONFIG } from "@/lib/maylu-config";
+import { supabase } from "@/lib/supabase";
 
 const DONORS = [
   { name: "Sergio Cam*",  time: "Hoy 12:56 am",  message: "", amount: "S/ 15.00" },
@@ -139,6 +140,13 @@ function DonorList({ id }: { id?: string }) {
 
 function Index() {
   const [imgAnim, setImgAnim] = useState("");
+  const [clickCount, setClickCount] = useState(0);
+
+  useEffect(() => {
+    supabase.from("photo_clicks").select("count").single().then(({ data }) => {
+      if (data) setClickCount(data.count);
+    });
+  }, []);
 
   const animClasses: Record<string, string> = {
     shake: "animate-shake",
@@ -154,6 +162,10 @@ function Index() {
     const next = triggers[Math.floor(Math.random() * triggers.length)];
     setImgAnim(next);
     setTimeout(() => setImgAnim(""), 600);
+    setClickCount((c) => c + 1);
+    supabase.rpc("increment_photo_click").then(({ error }) => {
+      if (error) console.error("Error al contar click", error);
+    });
   }
 
   return (
@@ -197,7 +209,7 @@ function Index() {
                 {CONFIG.dogName}
               </span>
             </h1>
-            <p className="mt-3 md:mt-4 max-w-lg text-sm text-cocoa/80 sm:text-base md:text-lg">
+            <p className="mt-3 md:mt-4 max-w-lg text-base text-cocoa/80 sm:text-base md:text-lg">
               {CONFIG.dogBreed} · {CONFIG.dogAge} años · Mi compañero desde el {CONFIG.arrivalDate}.
               Hace 2 días empezó a vomitar sangre y necesita una endoscopia urgente.
             </p>
@@ -234,6 +246,10 @@ function Index() {
             <div className="absolute -bottom-4 -left-4 rotate-[-6deg] rounded-2xl bg-white px-4 py-2 shadow-lg">
               <span className="block font-display text-sm font-bold text-cocoa">Maylu</span>
               <span className="block text-xs text-cocoa/60">desde 2013</span>
+            </div>
+            <div className="absolute -bottom-4 right-4 rotate-[6deg] rounded-2xl bg-cocoa px-4 py-2 shadow-lg select-none">
+              <span className="block font-display text-sm font-bold text-cream">🖱️ {clickCount}</span>
+              <span className="block text-xs text-cream/60">clicks</span>
             </div>
           </div>
         </div>
