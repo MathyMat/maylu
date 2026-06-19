@@ -19,6 +19,19 @@ const DONORS = [
   { name: "Wilser Ant*",  time: "Hoy 2:04 am",   message: "", amount: "S/ 10.00" },
   { name: "Yamilet Gar*", time: "Hoy 1:09 am",   message: "", amount: "S/ 0.90"  },
   { name: "Carmen Agu*",  time: "Hoy 1:09 am",   message: "", amount: "S/ 5.00"  },
+  { name: "Elizabeth Fer*", time: "Hoy 11:20 am", message: "", amount: "S/ 3.00"  },
+  { name: "Thirza Cas*",   time: "Hoy 10:45 am", message: "", amount: "S/ 10.00" },
+  { name: "Starly Inf*",   time: "Hoy 10:12 am", message: "", amount: "S/ 3.00"  },
+  { name: "Magally Jua*",  time: "Hoy 9:30 am",  message: "", amount: "S/ 15.00" },
+  { name: "Liam Cha*",     time: "Hoy 8:50 am",  message: "", amount: "S/ 5.00"  },
+  { name: "Ximena Ale*",   time: "Hoy 8:15 am",  message: "", amount: "S/ 15.00" },
+  { name: "Susan Ocam*", time: "Ayer 10:30 pm", message: "", amount: "S/ 10.00" },
+  { name: "Giuliana Ava*", time: "Ayer 9:45 pm", message: "", amount: "S/ 10.00" },
+  { name: "Claudia Sil*",  time: "Ayer 8:10 pm",  message: "", amount: "S/ 2.00"  },
+  { name: "Trezzia Pac*",  time: "Ayer 7:25 pm",  message: "", amount: "S/ 5.50"  },
+  { name: "Cristhian Cca*", time: "Ayer 6:40 pm",  message: "", amount: "S/ 20.00" },
+  { name: "Marcos Ban*",   time: "Ayer 5:55 pm",  message: "", amount: "S/ 3.00"  },
+  { name: "Roger San*",    time: "Ayer 5:10 pm",  message: "", amount: "S/ 5.00"  },
 ];
 
 const INITIAL_VISIBLE = 5;
