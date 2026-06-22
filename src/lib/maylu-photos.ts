@@ -15,6 +15,8 @@ import pate from "@/assets/maylu/maylufotos/pate.png";
 import maylurun from "@/assets/maylu/maylufotos/maylurun.jpg";
 import paloma from "@/assets/maylu/maylufotos/paloma.png";
 import gato from "@/assets/maylu/maylufotos/gato.png";
+import hematologia from "@/assets/maylu/maylufotos/hematologia.png";
+import bioquimica from "@/assets/maylu/maylufotos/bioquimica.png";
 
 export const photos = {
   portrait,
@@ -35,4 +37,6 @@ export const photos = {
   maylurun,
   paloma,
   gato,
+  hematologia,
+  bioquimica,
 };
