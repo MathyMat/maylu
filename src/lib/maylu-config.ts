@@ -16,9 +16,9 @@ export const CONFIG = {
   arrivalDate: "10 de marzo de 2013",
   subMetas: [
     { nombre: "Hemograma", meta: 180 },
-    { nombre: "Ecografía abdominal", meta: 120 },
     { nombre: "Placas de tórax y cuello", meta: 240 },
-    { nombre: "Endoscopia", meta: 3000 - 180 - 120 - 240 }, // 2460
+    { nombre: "Ecografía abdominal", meta: 120 },
+    { nombre: "Endoscopia", meta: 3000 - 180 - 240 - 120 }, // 2460
   ] satisfies SubMeta[],
 };
 
