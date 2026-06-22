@@ -71,6 +71,9 @@ export function DonationProgress() {
                 ) : (
                   item.nombre
                 )}
+                {item.nombre === "Hemograma" && (
+                  <span className="text-[10px] text-honey ml-1 italic">ver hemograma</span>
+                )}
               </span>
               <span className="text-xs text-cocoa/60 tabular-nums flex items-center gap-2">
                 {item.cumplido && <span className="text-green-600 font-bold">MUCHAS GRACIAS!!!</span>}
